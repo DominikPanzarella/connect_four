@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+<BorderPane prefHeight="550.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.connectfour.frontend.view.MainView">
+
+    <!-- Barra superiore -->
+    <top>
+        <AnchorPane fx:id="menuBarPane" style="-fx-background-color: #2d4059; -fx-padding: 10;">
+            <children>
+                <!-- Aggiungi qui il contenuto della barra dei menu -->
+            </children>
+        </AnchorPane>
+    </top>
+
+    <!-- Contenuto centrale -->
+    <center>
+        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" >
+
+
+            <!-- Sidebar destra (area non ancora definita) -->
+            <right>
+                <AnchorPane fx:id="tobeDefined" prefWidth="300.0" style="-fx-background-color: #ffffff; -fx-border-color: #d3d3d3; -fx-border-width: 0 0 0 1; -fx-padding: 15; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" BorderPane.alignment="CENTER">
+                    <!-- Contenuto specifico dell'area può essere aggiunto qui -->
+                </AnchorPane>
+            </right>
+
+            <!-- Area centrale principale (Gioco) -->
+            <center>
+                <VBox fx:id="mainWindow" alignment="CENTER" spacing="20" style="-fx-padding: 10;">
+                    <AnchorPane fx:id="columnSelectorPane"
+                                prefHeight="50.0"
+                                style="-fx-background-color: #2d4059; -fx-border-color: #d3d3d3; -fx-background-radius: 10; -fx-padding: 10;"
+                                AnchorPane.leftAnchor="20.0"
+                                AnchorPane.rightAnchor="20.0"/>
+
+                    <AnchorPane fx:id="connectFour" prefHeight="400.0" prefWidth="726.0" style="-fx-background-color: #2d4059; -fx-border-color: #d3d3d3; -fx-background-radius: 10;">
+
+                    </AnchorPane>
+                </VBox>
+            </center>
+
+            <!-- Sidebar sinistra (Giocatori) -->
+            <left>
+                <AnchorPane fx:id="playersPane" prefHeight="535.0" prefWidth="224.0" style="-fx-background-color: #ffffff; -fx-border-color: #d3d3d3; -fx-border-width: 0 1 0 0; -fx-padding: 0; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" BorderPane.alignment="CENTER">
+                    <!-- Aggiungi i dettagli dei giocatori qui -->
+                </AnchorPane>
+            </left>
+
+        </BorderPane>
+    </center>
+
+    <!-- Barra inferiore -->
+    <bottom>
+        <AnchorPane fx:id="infoBarPane" style="-fx-background-color: #2d4059; -fx-padding: 10;">
+            <children>
+                <!-- Aggiungi qui il contenuto della barra delle informazioni -->
+            </children>
+        </AnchorPane>
+    </bottom>
+</BorderPane>

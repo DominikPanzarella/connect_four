@@ -9,7 +9,6 @@
         xmlns="http://javafx.com/javafx/17.0.2-ea"
         xmlns:fx="http://javafx.com/fxml/1"
         maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0"
-        stylesheets="style.css"
 >
    <padding><Insets bottom="5" left="11" right="11" top="5" /></padding>
 

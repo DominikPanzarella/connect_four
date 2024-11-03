@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.input.KeyCodeCombination?>
 <GridPane fx:id="columnPane" xmlns:fx="http://javafx.com/fxml/1">
     <padding><Insets right="11" bottom="5" left="11" top="11"/></padding>
 
