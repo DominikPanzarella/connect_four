@@ -1,58 +1,62 @@
 package ch.supsi.connectfour.frontend.view;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
-import ch.supsi.connectfour.frontend.contracts.viewContracts.UncontrolledViewFxml;
+import ch.supsi.connectfour.frontend.contracts.viewContracts.ControlledViewFxml;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GameBoardView implements UncontrolledViewFxml
+public class PlayerBarView implements ControlledViewFxml
 {
     @FXML
-    private GridPane gridPane;
+    Button readCharacteristicsPlayer1Button;
+    @FXML
+    Button editCharacteristicsPlayer1Button;
 
+    @FXML
+    Button readCharacteristicsPlayer2Button;
+    @FXML
+    Button editCharacteristicsPlayer2Button;
+
+    @FXML
+    Button undoButton;
+    @FXML
+    Button redoButton;
+
+    private static PlayerBarView myself;
     private static Parent parent;
-    private static GameBoardView myself;
 
-    protected GameBoardView()
-    {
-        //empty constructor
+    protected PlayerBarView(){
+
     }
 
-    public static GameBoardView getInstance()
+    public static PlayerBarView getInstance()
     {
-        if(myself==null){
-            myself = new GameBoardView();
-            try{
+        if(myself==null)
+        {
+            try {
                 TranslationsController translationsController = TranslationsController.getInstance();
                 ResourceBundle bundle = translationsController.getResourceBundle();
-                URL fxmlurl = ColumnSelectorView.class.getResource("/view/gameboard.fxml");
-                if(fxmlurl != null){
+                URL fxmlurl = AboutView.class.getResource("/view/playerbar.fxml");
+                if (fxmlurl != null) {
                     FXMLLoader fxmlLoader = new FXMLLoader(fxmlurl, bundle);
+                    myself = new PlayerBarView();
                     fxmlLoader.setController(myself);
                     parent = fxmlLoader.load();
-
-                    String cssPath = GameBoardView.class.getResource("/style.css").toExternalForm();
-                    parent.getStylesheets().add(cssPath);
-
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
         return myself;
     }
 
-
     @Override
-    public void initialize()
-    {
+    public void initialize() {
 
     }
 

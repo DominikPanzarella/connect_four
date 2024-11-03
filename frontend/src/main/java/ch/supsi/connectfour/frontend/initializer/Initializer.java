@@ -1,55 +1,83 @@
 package ch.supsi.connectfour.frontend.initializer;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
-import ch.supsi.connectfour.frontend.model.PropertiesModel;
-import ch.supsi.connectfour.frontend.view.AboutView;
-import ch.supsi.connectfour.frontend.view.GameBoardView;
-import ch.supsi.connectfour.frontend.view.InfoBarView;
-import ch.supsi.connectfour.frontend.view.MenuBarView;
+import ch.supsi.connectfour.frontend.view.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Initializer
-{
+public class Initializer {
 
     public static void init(Stage stage) throws IOException {
 
         TranslationsController translationsController = TranslationsController.getInstance();
-       /*
+
+        /*
             ###################################
                 Loading all fxml files
             ###################################
         */
 
         // MENUBAR
-        Parent menuBar;
         MenuBarView menuBarView = MenuBarView.getInstance();
-        menuBar = menuBarView.getParent();
+        Parent menuBar = menuBarView.getParent();
 
         // INFOBAR
-        FXMLLoader infoBarViewLoader = new FXMLLoader(Initializer.class.getResource("/view/infoBarView.fxml"));
+        FXMLLoader infoBarViewLoader = new FXMLLoader(Initializer.class.getResource("/view/infobar.fxml"));
         Parent infoBarView = infoBarViewLoader.load();
-        InfoBarView infoBarViewView = infoBarViewLoader.getController();
-        infoBarViewView.addToDisplay(translationsController.translate("label.welcome"));
+        InfoBarView infoBarViewController = infoBarViewLoader.getController();
+        infoBarViewController.addToDisplay(translationsController.translate("label.welcome"));
 
         // ABOUT VIEW
         AboutView aboutView = AboutView.getInstance();
-        PropertiesModel propertiesModel = PropertiesModel.getInstance();
         aboutView.initialize();
 
         // GAMEBOARD VIEW
         GameBoardView gameBoardView = GameBoardView.getInstance();
-        aboutView.initialize();
+        gameBoardView.initialize();
+        Parent gameBoardViewParent = gameBoardView.getParent();
 
-        // menuBar.fxml inside mainView.fxml
+        // COLUMN SELECTOR VIEW
+        ColumnSelectorView columnSelectorView = ColumnSelectorView.getInstance();
+        columnSelectorView.initialize();
+        Parent columnSelectorViewParent = columnSelectorView.getParent();
 
+        // PLAYER SIDE BAR
+        PlayerBarView playerBarView = PlayerBarView.getInstance();
+        playerBarView.initialize();
+        Parent playerBarViewParent = playerBarView.getParent();
 
+        // Load main view and get controller
+        FXMLLoader mainViewLoader = new FXMLLoader(Initializer.class.getResource("/view/mainview.fxml"));
+        Parent mainView = mainViewLoader.load();
+        MainView mainViewController = mainViewLoader.getController();
 
-
+        // Integrate views into mainView.fxml's panes
+        addToAnchorPane(mainViewController.getMenuBarPane(), menuBar);
+        addToAnchorPane(mainViewController.getInfoBarPane(), infoBarView);
+        addToAnchorPane(mainViewController.getColumnSelectorPane(), columnSelectorViewParent);
+        addToAnchorPane(mainViewController.getConnectFour(), gameBoardViewParent); // Last added, should be on top
+        addToAnchorPane(mainViewController.getPlayersPane(), playerBarViewParent);
+        // Set up the stage
+        stage.setTitle("ConnectFour");
+        stage.setScene(new Scene(mainView));
+        stage.setResizable(false);
+        // stage.getIcons().add(new Image(Objects.requireNonNull(Initializer.class.getResourceAsStream("/logo/2DEditorLogo.png"))));
+        stage.show();
     }
 
+    /**
+     * Utility method to add a child to an AnchorPane and set all anchors to 0.
+     */
+    private static void addToAnchorPane(AnchorPane pane, Parent child) {
+        pane.getChildren().add(child);
+        AnchorPane.setTopAnchor(child, 0.0);
+        AnchorPane.setBottomAnchor(child, 0.0);
+        AnchorPane.setLeftAnchor(child, 0.0);
+        AnchorPane.setRightAnchor(child, 0.0);
+    }
 }

@@ -40,7 +40,7 @@ public class ColumnSelectorView implements ControlledViewFxml
         //empty constructor
     }
 
-    private static ColumnSelectorView getInstance(){
+    public static ColumnSelectorView getInstance(){
         if(myself==null){
             myself = new ColumnSelectorView();
             try{
