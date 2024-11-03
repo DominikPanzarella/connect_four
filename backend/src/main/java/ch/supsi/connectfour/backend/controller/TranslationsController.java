@@ -2,8 +2,8 @@ package ch.supsi.connectfour.backend.controller;
 
 
 
-import ch.supsi.connectfour.backend.service.PreferencesService;
-import ch.supsi.connectfour.backend.service.TranslationsService;
+import ch.supsi.connectfour.backend.service.preferences.PreferencesService;
+import ch.supsi.connectfour.backend.service.translation.TranslationsService;
 
 import java.util.ResourceBundle;
 

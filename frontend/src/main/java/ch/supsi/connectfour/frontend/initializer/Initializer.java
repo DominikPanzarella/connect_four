@@ -1,6 +1,11 @@
 package ch.supsi.connectfour.frontend.initializer;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
+import ch.supsi.connectfour.frontend.command.OpenFileCommand;
+import ch.supsi.connectfour.frontend.contracts.handler.OpenFileHandler;
+import ch.supsi.connectfour.frontend.contracts.receiver.OpenFileReceiver;
+import ch.supsi.connectfour.frontend.controller.MenuBarController;
+import ch.supsi.connectfour.frontend.model.ConnectFourModel;
 import ch.supsi.connectfour.frontend.view.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,10 +17,10 @@ import java.io.IOException;
 
 public class Initializer {
 
-    public static void init(Stage stage) throws IOException {
+    public static void init(Stage stage) throws IOException, InstantiationException {
 
         TranslationsController translationsController = TranslationsController.getInstance();
-
+        ConnectFourModel model = ConnectFourModel.getInstance();
         /*
             ###################################
                 Loading all fxml files
@@ -62,7 +67,49 @@ public class Initializer {
         addToAnchorPane(mainViewController.getColumnSelectorPane(), columnSelectorViewParent);
         addToAnchorPane(mainViewController.getConnectFour(), gameBoardViewParent); // Last added, should be on top
         addToAnchorPane(mainViewController.getPlayersPane(), playerBarViewParent);
-        // Set up the stage
+
+        /*
+           ###################################
+                   Setup Controller
+           ###################################
+         */
+        MenuBarController menuBarController = MenuBarController.getInstance(model);
+
+         /*
+           ###################################
+                   Setup Receiver
+           ###################################
+         */
+        OpenFileReceiver<OpenFileHandler> openFileReceiver = menuBarController;
+
+        /*
+           ###################################
+                   Setup Command
+           ###################################
+         */
+
+        OpenFileCommand<OpenFileReceiver<OpenFileHandler>> openFileCommand = OpenFileCommand.create(openFileReceiver);
+
+         /*
+           ###################################
+               Linking Component - Command
+           ###################################
+         */
+        menuBarView.createOpenMenuItemBehaviour(openFileCommand);
+
+         /*
+          ###################################
+              Linking Observer - Notifier
+           ###################################
+
+         */
+
+         /*
+          ###################################
+              Setup the stage
+           ###################################
+
+         */
         stage.setTitle("ConnectFour");
         stage.setScene(new Scene(mainView));
         stage.setResizable(false);

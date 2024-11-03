@@ -1,6 +1,9 @@
 package ch.supsi.connectfour.frontend.view;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
+import ch.supsi.connectfour.frontend.command.OpenFileCommand;
+import ch.supsi.connectfour.frontend.contracts.handler.OpenFileHandler;
+import ch.supsi.connectfour.frontend.contracts.receiver.OpenFileReceiver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.ControlledViewFxml;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -80,5 +82,9 @@ public class MenuBarView implements ControlledViewFxml
     @Override
     public Parent getParent() {
         return parent;
+    }
+
+    public <T extends OpenFileCommand<? extends OpenFileReceiver<OpenFileHandler>>> void createOpenMenuItemBehaviour(T command){
+        openMenuItem.setOnAction(action->command.execute());
     }
 }

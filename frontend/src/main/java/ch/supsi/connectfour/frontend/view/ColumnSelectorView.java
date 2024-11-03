@@ -2,12 +2,10 @@ package ch.supsi.connectfour.frontend.view;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.ControlledViewFxml;
-import ch.supsi.connectfour.frontend.contracts.viewContracts.UncontrolledViewFxml;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;

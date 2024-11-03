@@ -1,6 +1,6 @@
 package ch.supsi.connectfour.backend.repository;
 
-import ch.supsi.connectfour.backend.service.TranslationsRepositoryInterface;
+import ch.supsi.connectfour.backend.service.translation.TranslationsRepositoryInterface;
 
 import java.io.IOException;
 import java.io.InputStream;

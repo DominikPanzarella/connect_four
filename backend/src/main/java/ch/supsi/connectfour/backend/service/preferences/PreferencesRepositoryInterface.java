@@ -1,4 +1,4 @@
-package ch.supsi.connectfour.backend.service;
+package ch.supsi.connectfour.backend.service.preferences;
 
 import java.nio.file.Path;
 import java.util.Properties;

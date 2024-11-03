@@ -1,6 +1,6 @@
 package ch.supsi.connectfour.backend.repository;
 
-import ch.supsi.connectfour.backend.service.PreferencesRepositoryInterface;
+import ch.supsi.connectfour.backend.service.preferences.PreferencesRepositoryInterface;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

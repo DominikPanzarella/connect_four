@@ -1,4 +1,4 @@
-package ch.supsi.connectfour.backend.service;
+package ch.supsi.connectfour.backend.service.translation;
 
 
 import ch.supsi.connectfour.backend.controller.TranslationsServiceInterface;

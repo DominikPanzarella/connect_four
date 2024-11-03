@@ -1,4 +1,4 @@
-package ch.supsi.connectfour.backend.service;
+package ch.supsi.connectfour.backend.service.translation;
 
 import java.util.List;
 import java.util.Locale;

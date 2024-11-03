@@ -1,7 +1,7 @@
 package ch.supsi.connectfour.backend.controller;
 
 
-import ch.supsi.connectfour.backend.service.PreferencesService;
+import ch.supsi.connectfour.backend.service.preferences.PreferencesService;
 
 import java.nio.file.Path;
 
