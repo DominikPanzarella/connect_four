@@ -6,8 +6,10 @@ import ch.supsi.connectfour.frontend.contracts.handler.MakeMoveHandler;
 import ch.supsi.connectfour.frontend.contracts.observable.ColumnFullObservable;
 import ch.supsi.connectfour.frontend.contracts.observable.MoveObservable;
 import ch.supsi.connectfour.frontend.contracts.observer.ColumnFullObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.GameHasAWinnerObserver;
 import ch.supsi.connectfour.frontend.contracts.receiver.MakeMoveReceiver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.ControlledViewFxml;
+import ch.supsi.connectfour.frontend.presentable.Presentable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,7 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ColumnSelectorView implements ControlledViewFxml, MoveObservable, ColumnFullObserver
+public class ColumnSelectorView implements ControlledViewFxml, MoveObservable, ColumnFullObserver, GameHasAWinnerObserver
 {
     @FXML
     private GridPane columnPane;
@@ -127,5 +129,16 @@ public class ColumnSelectorView implements ControlledViewFxml, MoveObservable, C
                 col6.setDisable(true);
                 break;
         }
+    }
+
+    @Override
+    public void gameHasAWinner(Presentable winnerPlayer) {
+        col0.setDisable(true);
+        col1.setDisable(true);
+        col2.setDisable(true);
+        col3.setDisable(true);
+        col4.setDisable(true);
+        col5.setDisable(true);
+        col6.setDisable(true);
     }
 }

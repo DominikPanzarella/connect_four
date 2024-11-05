@@ -2,7 +2,10 @@ package ch.supsi.connectfour.frontend.view;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
 import ch.supsi.connectfour.backend.service.gamelogic.move.Move;
+import ch.supsi.connectfour.backend.service.gamelogic.player.Player;
 import ch.supsi.connectfour.frontend.contracts.observer.FeedbackObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.GameDrawObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.GameHasAWinnerObserver;
 import ch.supsi.connectfour.frontend.contracts.observer.MoveObserver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.UncontrolledViewFxml;
 import ch.supsi.connectfour.frontend.presentable.Presentable;
@@ -18,7 +21,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
-public class InfoBarView implements UncontrolledViewFxml, FeedbackObserver
+public class InfoBarView implements UncontrolledViewFxml, FeedbackObserver, GameHasAWinnerObserver, GameDrawObserver
 {
     @FXML
     private Text infobarText;
@@ -87,5 +90,15 @@ public class InfoBarView implements UncontrolledViewFxml, FeedbackObserver
     @Override
     public void updateFeedback(Presentable feedback) {
         addToDisplay(feedback.getString());
+    }
+
+    @Override
+    public void gameHasAWinner(Presentable winnerPlayer) {
+        addToDisplay(winnerPlayer.getString());
+    }
+
+    @Override
+    public void gameDraw(Presentable toPrint) {
+
     }
 }

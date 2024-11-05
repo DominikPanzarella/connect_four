@@ -5,10 +5,13 @@ import ch.supsi.connectfour.backend.service.gamelogic.player.HumanPlayer;
 import ch.supsi.connectfour.backend.service.gamelogic.player.MyColor;
 import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbol;
 import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
+import ch.supsi.connectfour.frontend.command.ExportFileCommand;
 import ch.supsi.connectfour.frontend.command.MakeMoveCommand;
 import ch.supsi.connectfour.frontend.command.OpenFileCommand;
+import ch.supsi.connectfour.frontend.contracts.handler.ExportFileHandler;
 import ch.supsi.connectfour.frontend.contracts.handler.MakeMoveHandler;
 import ch.supsi.connectfour.frontend.contracts.handler.OpenFileHandler;
+import ch.supsi.connectfour.frontend.contracts.receiver.ExportFileReceiver;
 import ch.supsi.connectfour.frontend.contracts.receiver.MakeMoveReceiver;
 import ch.supsi.connectfour.frontend.contracts.receiver.OpenFileReceiver;
 import ch.supsi.connectfour.frontend.controller.ColumnSelectorController;
@@ -86,7 +89,7 @@ public class Initializer {
                    Setup Controller
            ###################################
          */
-        MenuBarController menuBarController = MenuBarController.getInstance(model);
+        MenuBarController menuBarController = MenuBarController.getInstance(model,model);
         ColumnSelectorController columnSelectorController = ColumnSelectorController.getInstance(model);
          /*
            ###################################
@@ -95,7 +98,7 @@ public class Initializer {
          */
         OpenFileReceiver<OpenFileHandler> openFileReceiver = menuBarController;
         MakeMoveReceiver<MakeMoveHandler> makeMoveReceiver = columnSelectorController;
-
+        ExportFileReceiver<ExportFileHandler> exportFileReceiver = menuBarController;
         /*
            ###################################
                    Setup Command
@@ -111,6 +114,7 @@ public class Initializer {
         MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn5Command = MakeMoveCommand.create(makeMoveReceiver,5);
         MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn6Command = MakeMoveCommand.create(makeMoveReceiver,6);
 
+        ExportFileCommand<ExportFileReceiver<ExportFileHandler>> exportFileCommand = ExportFileCommand.create(exportFileReceiver);
          /*
            ###################################
                Linking Component - Command
@@ -125,6 +129,7 @@ public class Initializer {
         columnSelectorView.makeMoveColumn5(makeMoveColumn5Command);
         columnSelectorView.makeMoveColumn6(makeMoveColumn6Command);
 
+        menuBarView.createExportFileBehaviour(exportFileCommand);
 
          /*
           ###################################
@@ -136,6 +141,9 @@ public class Initializer {
         model.addMoveObserver(gameBoardView);
         model.addObserver(infoBarView);
         model.addColumnFullObserver(columnSelectorView);
+        model.addGameHasAWinnerObserver(infoBarView);
+        model.addGameHasAWinnerObserver(columnSelectorView);
+        model.addGameDrawObserver(infoBarView);
 
          /*
           ###################################

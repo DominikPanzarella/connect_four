@@ -1,8 +1,11 @@
 package ch.supsi.connectfour.frontend.view;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
+import ch.supsi.connectfour.frontend.command.ExportFileCommand;
 import ch.supsi.connectfour.frontend.command.OpenFileCommand;
+import ch.supsi.connectfour.frontend.contracts.handler.ExportFileHandler;
 import ch.supsi.connectfour.frontend.contracts.handler.OpenFileHandler;
+import ch.supsi.connectfour.frontend.contracts.receiver.ExportFileReceiver;
 import ch.supsi.connectfour.frontend.contracts.receiver.OpenFileReceiver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.ControlledViewFxml;
 import javafx.fxml.FXML;
@@ -74,7 +77,7 @@ public class MenuBarView implements ControlledViewFxml
 
     @Override
     public void initialize() {
-        saveAsMenuItem.setDisable(true);
+        //saveAsMenuItem.setDisable(true);
         saveMenuItem.setDisable(true);
 
     }
@@ -87,4 +90,9 @@ public class MenuBarView implements ControlledViewFxml
     public <T extends OpenFileCommand<? extends OpenFileReceiver<OpenFileHandler>>> void createOpenMenuItemBehaviour(T command){
         openMenuItem.setOnAction(action->command.execute());
     }
+
+    public <T extends ExportFileCommand<? extends ExportFileReceiver<ExportFileHandler>>> void createExportFileBehaviour(T command){
+        saveAsMenuItem.setOnAction(action->command.execute());
+    }
+
 }

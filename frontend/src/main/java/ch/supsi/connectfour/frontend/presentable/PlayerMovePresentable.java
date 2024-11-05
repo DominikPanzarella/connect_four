@@ -7,8 +7,7 @@ import java.awt.print.Printable;
 
 public class PlayerMovePresentable implements Presentable
 {
-    private final String stringPlaceholder = "user.move";
-    private final String stringToReturn = "%s %s %s %n";
+    private final String stringPlaceholder = "user.message.player.move";
     private final TranslationsController translationsController = TranslationsController.getInstance();
     private Move move;
 
@@ -22,8 +21,7 @@ public class PlayerMovePresentable implements Presentable
     public String getString(){
         String playerName = move.getPlayer().getName();
         String placeHolderTranslated = translationsController.translate(stringPlaceholder);
-        String coordinateString = move.getCoordinateString();
-        return String.format(stringToReturn, playerName, placeHolderTranslated, coordinateString);
+        return String.format(placeHolderTranslated, playerName, move.getRow(), move.getColumn());
     }
 
 
