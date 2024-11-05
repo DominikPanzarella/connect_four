@@ -45,8 +45,8 @@ public class SwitchTurnController
         return switchTurnService.getMaxPlayers();
     }
 
-    public void switchTurn(boolean onMyTurn)
+    public void switchTurn()
     {
-        switchTurnService.switchTurn(onMyTurn);
+        switchTurnService.switchTurn();
     }
 }

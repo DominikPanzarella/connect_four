@@ -1,9 +1,17 @@
 package ch.supsi.connectfour.frontend.initializer;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
+import ch.supsi.connectfour.backend.service.gamelogic.player.HumanPlayer;
+import ch.supsi.connectfour.backend.service.gamelogic.player.MyColor;
+import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbol;
+import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
+import ch.supsi.connectfour.frontend.command.MakeMoveCommand;
 import ch.supsi.connectfour.frontend.command.OpenFileCommand;
+import ch.supsi.connectfour.frontend.contracts.handler.MakeMoveHandler;
 import ch.supsi.connectfour.frontend.contracts.handler.OpenFileHandler;
+import ch.supsi.connectfour.frontend.contracts.receiver.MakeMoveReceiver;
 import ch.supsi.connectfour.frontend.contracts.receiver.OpenFileReceiver;
+import ch.supsi.connectfour.frontend.controller.ColumnSelectorController;
 import ch.supsi.connectfour.frontend.controller.MenuBarController;
 import ch.supsi.connectfour.frontend.model.ConnectFourModel;
 import ch.supsi.connectfour.frontend.view.*;
@@ -21,6 +29,13 @@ public class Initializer {
 
         TranslationsController translationsController = TranslationsController.getInstance();
         ConnectFourModel model = ConnectFourModel.getInstance();
+
+
+        MySymbolInterface player1Symbol = new MySymbol('A', new MyColor(1.0,0,0));
+        MySymbolInterface player2Symbol = new MySymbol('B', new MyColor(0,1.0,0));
+
+        model.addPlayer(new HumanPlayer("Player1", player1Symbol));
+        model.addPlayer(new HumanPlayer("Player2", player2Symbol));
         /*
             ###################################
                 Loading all fxml files
@@ -32,10 +47,8 @@ public class Initializer {
         Parent menuBar = menuBarView.getParent();
 
         // INFOBAR
-        FXMLLoader infoBarViewLoader = new FXMLLoader(Initializer.class.getResource("/view/infobar.fxml"));
-        Parent infoBarView = infoBarViewLoader.load();
-        InfoBarView infoBarViewController = infoBarViewLoader.getController();
-        infoBarViewController.addToDisplay(translationsController.translate("label.welcome"));
+        InfoBarView infoBarView = InfoBarView.getInstance();
+        Parent infoBarViewParent = infoBarView.getParent();
 
         // ABOUT VIEW
         AboutView aboutView = AboutView.getInstance();
@@ -63,7 +76,7 @@ public class Initializer {
 
         // Integrate views into mainView.fxml's panes
         addToAnchorPane(mainViewController.getMenuBarPane(), menuBar);
-        addToAnchorPane(mainViewController.getInfoBarPane(), infoBarView);
+        addToAnchorPane(mainViewController.getInfoBarPane(), infoBarViewParent);
         addToAnchorPane(mainViewController.getColumnSelectorPane(), columnSelectorViewParent);
         addToAnchorPane(mainViewController.getConnectFour(), gameBoardViewParent); // Last added, should be on top
         addToAnchorPane(mainViewController.getPlayersPane(), playerBarViewParent);
@@ -74,13 +87,14 @@ public class Initializer {
            ###################################
          */
         MenuBarController menuBarController = MenuBarController.getInstance(model);
-
+        ColumnSelectorController columnSelectorController = ColumnSelectorController.getInstance(model);
          /*
            ###################################
                    Setup Receiver
            ###################################
          */
         OpenFileReceiver<OpenFileHandler> openFileReceiver = menuBarController;
+        MakeMoveReceiver<MakeMoveHandler> makeMoveReceiver = columnSelectorController;
 
         /*
            ###################################
@@ -89,6 +103,13 @@ public class Initializer {
          */
 
         OpenFileCommand<OpenFileReceiver<OpenFileHandler>> openFileCommand = OpenFileCommand.create(openFileReceiver);
+        MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn0Command = MakeMoveCommand.create(makeMoveReceiver,0);
+        MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn1Command = MakeMoveCommand.create(makeMoveReceiver,1);
+        MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn2Command = MakeMoveCommand.create(makeMoveReceiver,2);
+        MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn3Command = MakeMoveCommand.create(makeMoveReceiver,3);
+        MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn4Command = MakeMoveCommand.create(makeMoveReceiver,4);
+        MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn5Command = MakeMoveCommand.create(makeMoveReceiver,5);
+        MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn6Command = MakeMoveCommand.create(makeMoveReceiver,6);
 
          /*
            ###################################
@@ -96,6 +117,14 @@ public class Initializer {
            ###################################
          */
         menuBarView.createOpenMenuItemBehaviour(openFileCommand);
+        columnSelectorView.makeMoveColumn0(makeMoveColumn0Command);
+        columnSelectorView.makeMoveColumn1(makeMoveColumn1Command);
+        columnSelectorView.makeMoveColumn2(makeMoveColumn2Command);
+        columnSelectorView.makeMoveColumn3(makeMoveColumn3Command);
+        columnSelectorView.makeMoveColumn4(makeMoveColumn4Command);
+        columnSelectorView.makeMoveColumn5(makeMoveColumn5Command);
+        columnSelectorView.makeMoveColumn6(makeMoveColumn6Command);
+
 
          /*
           ###################################
@@ -103,6 +132,10 @@ public class Initializer {
            ###################################
 
          */
+
+        model.addMoveObserver(gameBoardView);
+        model.addObserver(infoBarView);
+        model.addColumnFullObserver(columnSelectorView);
 
          /*
           ###################################

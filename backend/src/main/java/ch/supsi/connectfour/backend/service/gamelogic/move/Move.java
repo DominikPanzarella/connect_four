@@ -39,5 +39,9 @@ public class Move implements MoveInterface
         return "Move: [" + playerName + " moved to row " + row + ", column " + column + "]";
     }
 
+    public String getCoordinateString(){
+        return "["+row+","+column+"]";
+    }
+
 
 }

@@ -66,16 +66,12 @@ public class SwitchTurnService implements SwitchTurnServiceInterface {
         this.currentPlayerIndex = 0;
     }
 
-    @Override
-    public void switchTurn(boolean onPlayerTurn)
+    public void switchTurn()
     {
         if(players.isEmpty())           throw new EmptyGameException();
 
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
 
-        if(onPlayerTurn){
-            players.get(currentPlayerIndex).onMyTurn();
-        }
 
     }
 

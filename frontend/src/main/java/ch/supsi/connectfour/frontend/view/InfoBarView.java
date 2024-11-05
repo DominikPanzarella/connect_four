@@ -1,22 +1,63 @@
 package ch.supsi.connectfour.frontend.view;
 
+import ch.supsi.connectfour.backend.controller.TranslationsController;
+import ch.supsi.connectfour.backend.service.gamelogic.move.Move;
+import ch.supsi.connectfour.frontend.contracts.observer.FeedbackObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.MoveObserver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.UncontrolledViewFxml;
+import ch.supsi.connectfour.frontend.presentable.Presentable;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
+import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ResourceBundle;
 
-public class InfoBarView implements UncontrolledViewFxml
+public class InfoBarView implements UncontrolledViewFxml, FeedbackObserver
 {
     @FXML
     private Text infobarText;
     @FXML
     private ScrollPane scrollPane;
 
+    private TranslationsController translationsController;
+
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+    private static InfoBarView myself;
+    private static Parent parent;
+
+
+    protected InfoBarView()
+    {
+        //empty constructor
+    }
+
+    public static InfoBarView getInstance()
+    {
+        if(myself==null){
+            myself = new InfoBarView();
+            try{
+                TranslationsController translationsController = TranslationsController.getInstance();
+                ResourceBundle bundle = translationsController.getResourceBundle();
+                URL fxmlurl = InfoBarView.class.getResource("/view/infobar.fxml");
+                if(fxmlurl != null){
+                    FXMLLoader fxmlLoader = new FXMLLoader(fxmlurl, bundle);
+                    fxmlLoader.setController(myself);
+                    parent = fxmlLoader.load();
+
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return myself;
+    }
 
 
     public void addToDisplay(String feedback) {
@@ -40,6 +81,11 @@ public class InfoBarView implements UncontrolledViewFxml
 
     @Override
     public Parent getParent() {
-        return null;
+        return parent;
+    }
+
+    @Override
+    public void updateFeedback(Presentable feedback) {
+        addToDisplay(feedback.getString());
     }
 }

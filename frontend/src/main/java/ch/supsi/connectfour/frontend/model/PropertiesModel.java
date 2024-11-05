@@ -10,6 +10,7 @@ public class PropertiesModel implements Observable, PropertiesHandler
 {
     private static PropertiesModel myself;
     private final Properties properties;
+    private List<Character> symbols;
 
     private String version;
     private String dateTimeBuild;
@@ -24,6 +25,7 @@ public class PropertiesModel implements Observable, PropertiesHandler
 
             version = properties.getProperty("version");
             dateTimeBuild = properties.getProperty("build.timestamp");
+            symbols = properties.getProperty("symbols").chars().mapToObj(c -> (char) c).toList();
 
             String[] devs = properties.getProperty("devs").split(" - ");
             for(String dev : devs){
@@ -63,5 +65,10 @@ public class PropertiesModel implements Observable, PropertiesHandler
     @Override
     public Map<String, String> loadDevelopers() {
         return developers;
+    }
+
+    @Override
+    public List<Character> getSymbols() {
+        return symbols;
     }
 }

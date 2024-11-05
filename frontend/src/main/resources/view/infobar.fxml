@@ -7,8 +7,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.connectfour.frontend.view.InfoBarView" style="-fx-border-color: c5c6c7;">
-    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" maxHeight="40" style="-fx-background-color: lightblue;">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-border-myColorInterface: c5c6c7;">
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" maxHeight="40" style="-fx-background-myColorInterface: lightblue;">
         <content>
             <TextFlow maxHeight="40">
                 <padding>

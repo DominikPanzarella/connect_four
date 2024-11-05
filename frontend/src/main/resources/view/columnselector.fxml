@@ -22,38 +22,38 @@
     <children>
         <AnchorPane GridPane.columnIndex="0">
             <children>
-                <Button id="col0" prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <Button fx:id="col0" prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
             </children>
         </AnchorPane>
         <AnchorPane GridPane.columnIndex="1">
             <children>
-                <Button id="col1" prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <Button fx:id="col1" prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
         <AnchorPane GridPane.columnIndex="2">
             <children>
-                <Button id="col2" prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                <Button fx:id="col2" prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
             </children>
         </AnchorPane>
         <AnchorPane GridPane.columnIndex="3">
             <children>
-                <Button id="col3" prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <Button fx:id="col3" prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
         <AnchorPane GridPane.columnIndex="4">
             <children>
-                <Button id="col4"  prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <Button fx:id="col4"  prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
         <AnchorPane GridPane.columnIndex="5">
             <children>
-                <Button id="col5"  prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <Button fx:id="col5"  prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
         <AnchorPane GridPane.columnIndex="6">
             <children>
-                <Button id="col6"  prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <Button fx:id="col6"  prefWidth="55.0" style="-fx-font-size: 20;" mnemonicParsing="false" text="⬇" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
     </children>

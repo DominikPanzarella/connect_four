@@ -1,6 +1,12 @@
 package ch.supsi.connectfour.frontend.view;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
+import ch.supsi.connectfour.frontend.command.MakeMoveCommand;
+import ch.supsi.connectfour.frontend.contracts.handler.MakeMoveHandler;
+import ch.supsi.connectfour.frontend.contracts.observable.ColumnFullObservable;
+import ch.supsi.connectfour.frontend.contracts.observable.MoveObservable;
+import ch.supsi.connectfour.frontend.contracts.observer.ColumnFullObserver;
+import ch.supsi.connectfour.frontend.contracts.receiver.MakeMoveReceiver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.ControlledViewFxml;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ColumnSelectorView implements ControlledViewFxml
+public class ColumnSelectorView implements ControlledViewFxml, MoveObservable, ColumnFullObserver
 {
     @FXML
     private GridPane columnPane;
@@ -64,5 +70,62 @@ public class ColumnSelectorView implements ControlledViewFxml
     @Override
     public Parent getParent() {
         return parent;
+    }
+
+    public <T extends MakeMoveCommand<? extends MakeMoveReceiver<MakeMoveHandler>>> void makeMoveColumn0(T command){
+        col0.setOnAction(action->command.execute());
+    }
+
+    public <T extends MakeMoveCommand<? extends MakeMoveReceiver<MakeMoveHandler>>> void makeMoveColumn1(T command){
+        col1.setOnAction(action->command.execute());
+    }
+
+    public <T extends MakeMoveCommand<? extends MakeMoveReceiver<MakeMoveHandler>>> void makeMoveColumn2(T command){
+        col2.setOnAction(action->command.execute());
+    }
+
+    public <T extends MakeMoveCommand<? extends MakeMoveReceiver<MakeMoveHandler>>> void makeMoveColumn3(T command){
+        col3.setOnAction(action->command.execute());
+    }
+
+    public <T extends MakeMoveCommand<? extends MakeMoveReceiver<MakeMoveHandler>>> void makeMoveColumn4(T command){
+        col4.setOnAction(action->command.execute());
+    }
+
+    public <T extends MakeMoveCommand<? extends MakeMoveReceiver<MakeMoveHandler>>> void makeMoveColumn5(T command){
+        col5.setOnAction(action->command.execute());
+    }
+
+    public <T extends MakeMoveCommand<? extends MakeMoveReceiver<MakeMoveHandler>>> void makeMoveColumn6(T command){
+        col6.setOnAction(action->command.execute());
+    }
+
+    //TODO: refactor with a more flexible approach
+    @Override
+    public void disableColumn(int column) {
+        switch (column)
+        {
+            case 0:
+                col0.setDisable(true);
+            break;
+            case 1:
+                col1.setDisable(true);
+                break;
+            case 2:
+                col2.setDisable(true);
+                break;
+            case 3:
+                col3.setDisable(true);
+                break;
+            case 4:
+                col4.setDisable(true);
+                break;
+            case 5:
+                col5.setDisable(true);
+                break;
+            case 6:
+                col6.setDisable(true);
+                break;
+        }
     }
 }

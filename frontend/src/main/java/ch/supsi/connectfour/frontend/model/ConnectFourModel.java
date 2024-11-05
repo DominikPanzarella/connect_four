@@ -3,21 +3,29 @@ package ch.supsi.connectfour.frontend.model;
 import ch.supsi.connectfour.backend.controller.PreferencesController;
 import ch.supsi.connectfour.backend.controller.SwitchTurnController;
 import ch.supsi.connectfour.backend.controller.TranslationsController;
+import ch.supsi.connectfour.backend.exceptions.ColumnFullException;
 import ch.supsi.connectfour.backend.exceptions.GameFullException;
+import ch.supsi.connectfour.backend.exceptions.GameNotRunningException;
+import ch.supsi.connectfour.backend.exceptions.NotYourTurnException;
 import ch.supsi.connectfour.backend.service.gamelogic.board.GameBoard;
 import ch.supsi.connectfour.backend.service.gamelogic.board.GameBoardInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.game.GameStatusType;
+import ch.supsi.connectfour.backend.service.gamelogic.move.Move;
 import ch.supsi.connectfour.backend.service.gamelogic.move.MoveInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.Player;
 import ch.supsi.connectfour.frontend.contracts.handler.MakeMoveHandler;
 import ch.supsi.connectfour.frontend.contracts.handler.OpenFileHandler;
+import ch.supsi.connectfour.frontend.contracts.observable.ColumnFullObservable;
+import ch.supsi.connectfour.frontend.contracts.observable.FeedbackObservable;
+import ch.supsi.connectfour.frontend.contracts.observable.MoveObservable;
+import ch.supsi.connectfour.frontend.presentable.PlayerMovePresentable;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler
+public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler, MoveObservable, ColumnFullObservable, FeedbackObservable
 {
     private static final int MAX_PLAYERS = 2;
     private GameBoardInterface board;
@@ -34,7 +42,7 @@ public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler
         this.switchTurnController = SwitchTurnController.getInstance();
         this.translationsController = TranslationsController.getInstance();
         this.preferencesController = PreferencesController.getInstance();
-        this.status = GameStatusType.NOT_STARTED;
+        this.status = GameStatusType.IN_PROGRESS;
         this.moves = new ArrayList<>();
     }
 
@@ -76,11 +84,6 @@ public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler
     }
 
 
-    @Override
-    public void makeMove() {
-        board.findFirstAvailableRow(0);
-    }
-
     private boolean isWinningMove(MoveInterface move)
     {
         Player player = move.getPlayer();
@@ -111,5 +114,45 @@ public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler
             }
         }
         return false;
+    }
+
+    @Override
+    public void makeMove(int column) {
+
+        if(status != GameStatusType.IN_PROGRESS)
+            throw new GameNotRunningException();
+
+
+        int firstAvailableRow = board.findFirstAvailableRow(column);
+
+        Player currentPlayer = switchTurnController.getCurrentPlayer();
+        System.out.println(currentPlayer.getName());
+        Move move = new Move(firstAvailableRow, column, currentPlayer);
+
+        moves.add(move);
+        board.setCell(move);
+        notifyMoveObservers(move);
+
+        //TODO: add a presentable class
+        //String toPrint = currentPlayer.getName() + " "+ translationsController.translate("user.move") + "[" + move.getRow()+","+move.getColumn()+"]";
+
+        notifyFeedbackObservers(new PlayerMovePresentable(move));
+
+        if(board.isColumnFull(column))
+            notifyColumnFullObservers(column);
+
+        // check for a winning move
+        if(isWinningMove(move)){
+            status = GameStatusType.WINNER;
+            //events.dispatch(GameEventType.GAME_ENDED, move.getPlayer());
+        }       //check for a draw
+        else if(board.isFull()){
+            status = GameStatusType.DRAW;
+            //events.dispatch(GameEventType.GAME_ENDED, null);
+        }
+        else //switch turn
+            switchTurnController.switchTurn();
+
+
     }
 }

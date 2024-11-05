@@ -7,13 +7,15 @@ public abstract class Player implements OnMyTurnInterface
 {
     private GameServiceInterface gameService;
     private String name;
+    private MySymbolInterface symbol;
 
     public Player() {
         name = "unknown";
     }
 
-    public Player(final String name){
+    public Player(final String name, MySymbolInterface symbol){
         this.name = name;
+        this.symbol = symbol;
     }
 
     public void changeName(final String name){
@@ -32,11 +34,16 @@ public abstract class Player implements OnMyTurnInterface
         return gameService;
     }
 
-    public void play(final int row,final int col){
-        final Move move = new Move(row,col,this);
-        //gameService.play(move,true);
 
+    public Character getPlayerCharacter(){
+        return symbol.getCharacter();
     }
+
+    public MyColorInterface getPlayerColors(){
+        return symbol.getColor();
+    }
+
+
 
     @Override
     public String toString() {

@@ -12,5 +12,5 @@ public interface SwitchTurnServiceInterface
     int getCurrentPlayers();
     int getCurrentPlayerIndex();
     int getMaxPlayers();
-    void switchTurn(boolean onMyTurn);
+    void switchTurn();
 }
