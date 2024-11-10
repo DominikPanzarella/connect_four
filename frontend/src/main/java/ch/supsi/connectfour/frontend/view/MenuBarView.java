@@ -1,12 +1,9 @@
 package ch.supsi.connectfour.frontend.view;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
-import ch.supsi.connectfour.frontend.command.ExportFileCommand;
-import ch.supsi.connectfour.frontend.command.OpenFileCommand;
-import ch.supsi.connectfour.frontend.contracts.handler.ExportFileHandler;
-import ch.supsi.connectfour.frontend.contracts.handler.OpenFileHandler;
-import ch.supsi.connectfour.frontend.contracts.receiver.ExportFileReceiver;
-import ch.supsi.connectfour.frontend.contracts.receiver.OpenFileReceiver;
+import ch.supsi.connectfour.frontend.command.*;
+import ch.supsi.connectfour.frontend.contracts.handler.*;
+import ch.supsi.connectfour.frontend.contracts.receiver.*;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.ControlledViewFxml;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,6 +34,15 @@ public class MenuBarView implements ControlledViewFxml
     Menu editMenu;
     @FXML
     Menu changeLanguageMenu;
+    @FXML
+    MenuItem enUSMenuItem;
+    @FXML
+    MenuItem itCHMenuItem;
+
+    @FXML
+    MenuItem frFRMenuItem;
+    @FXML
+    MenuItem deDEMenuItem;
     @FXML
     MenuItem changeSymbol;
 
@@ -94,5 +100,30 @@ public class MenuBarView implements ControlledViewFxml
     public <T extends ExportFileCommand<? extends ExportFileReceiver<ExportFileHandler>>> void createExportFileBehaviour(T command){
         saveAsMenuItem.setOnAction(action->command.execute());
     }
+
+    public <T extends ExitCommand<? extends ExitReceiver<ExitHandler>>> void createExitBehaviour(T command){
+        quitMenuItem.setOnAction(action->command.execute());
+    }
+
+    public <T extends AboutCommand<? extends AboutReceiver<AboutHandler>>> void createAboutBehavior(T command) {
+        aboutMenuItem.setOnAction(action -> command.execute());
+    }
+
+    public <T extends ChangeLanguageCommand<? extends ChangeLanguageReceiver<ChangeLanguageHandler>>> void createEnUSMenuItemBehaviour(T command){
+        enUSMenuItem.setOnAction(action->command.execute());
+    }
+
+    public <T extends ChangeLanguageCommand<? extends ChangeLanguageReceiver<ChangeLanguageHandler>>> void createItCHMenuItemBehaviour(T command){
+        itCHMenuItem.setOnAction(action->command.execute());
+    }
+
+    public <T extends ChangeLanguageCommand<? extends ChangeLanguageReceiver<ChangeLanguageHandler>>> void createFrFRMenuItemBehaviour(T command){
+        frFRMenuItem.setOnAction(action->command.execute());
+    }
+
+    public <T extends ChangeLanguageCommand<? extends ChangeLanguageReceiver<ChangeLanguageHandler>>> void createDeDEMenuItemBehaviour(T command){
+        deDEMenuItem.setOnAction(action->command.execute());
+    }
+
 
 }

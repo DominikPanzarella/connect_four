@@ -21,20 +21,28 @@
 
                   <!-- Sezione Giocatore 1 -->
                   <VBox spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #d3d3d3; -fx-border-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);">
-                     <Label text="Giocatore 1" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2d4059;" />
+                     <Label text="Nome:" style="-fx-font-size: 14px; -fx-text-fill: #4a4a4a;" />
+                     <Label fx:id="player1Name" text="Player1" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2d4059;" />
+
+                     <Label text="Simbolo:" style="-fx-font-size: 14px; -fx-text-fill: #4a4a4a;" />
+                     <Label fx:id="player1Symbol" text="A" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2d4059;" />
+
                      <HBox spacing="10" alignment="CENTER_LEFT">
                         <Label text="Caratteristiche:" style="-fx-text-fill: #4a4a4a;" />
-                        <Button text="Leggi" fx:id="readCharacteristicsPlayer1Button" style="-fx-background-color: #2d4059; -fx-text-fill: #ffffff; -fx-background-radius: 5;" />
                         <Button text="Modifica" fx:id="editCharacteristicsPlayer1Button" style="-fx-background-color: #2d4059; -fx-text-fill: #ffffff; -fx-background-radius: 5;" />
                      </HBox>
                   </VBox>
 
                   <!-- Sezione Giocatore 2 -->
                   <VBox spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #d3d3d3; -fx-border-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);">
-                     <Label text="Giocatore 2" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2d4059;" />
+                     <Label text="Nome:" style="-fx-font-size: 14px; -fx-text-fill: #4a4a4a;" />
+                     <Label fx:id="player2Name" text="Player2" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2d4059;" />
+
+                     <Label text="Simbolo:" style="-fx-font-size: 14px; -fx-text-fill: #4a4a4a;" />
+                     <Label fx:id="player2Symbol" text="B" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2d4059;" />
+
                      <HBox spacing="10" alignment="CENTER_LEFT">
                         <Label text="Caratteristiche:" style="-fx-text-fill: #4a4a4a;" />
-                        <Button text="Leggi" fx:id="readCharacteristicsPlayer2Button" style="-fx-background-color: #2d4059; -fx-text-fill: #ffffff; -fx-background-radius: 5;" />
                         <Button text="Modifica" fx:id="editCharacteristicsPlayer2Button" style="-fx-background-color: #2d4059; -fx-text-fill: #ffffff; -fx-background-radius: 5;" />
                      </HBox>
                   </VBox>

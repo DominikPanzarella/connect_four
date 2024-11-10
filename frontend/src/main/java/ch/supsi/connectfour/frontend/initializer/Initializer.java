@@ -1,22 +1,16 @@
 package ch.supsi.connectfour.frontend.initializer;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
-import ch.supsi.connectfour.backend.service.gamelogic.player.HumanPlayer;
-import ch.supsi.connectfour.backend.service.gamelogic.player.MyColor;
-import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbol;
-import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
-import ch.supsi.connectfour.frontend.command.ExportFileCommand;
-import ch.supsi.connectfour.frontend.command.MakeMoveCommand;
-import ch.supsi.connectfour.frontend.command.OpenFileCommand;
-import ch.supsi.connectfour.frontend.contracts.handler.ExportFileHandler;
-import ch.supsi.connectfour.frontend.contracts.handler.MakeMoveHandler;
-import ch.supsi.connectfour.frontend.contracts.handler.OpenFileHandler;
-import ch.supsi.connectfour.frontend.contracts.receiver.ExportFileReceiver;
-import ch.supsi.connectfour.frontend.contracts.receiver.MakeMoveReceiver;
-import ch.supsi.connectfour.frontend.contracts.receiver.OpenFileReceiver;
+import ch.supsi.connectfour.backend.service.gamelogic.player.*;
+import ch.supsi.connectfour.frontend.command.*;
+import ch.supsi.connectfour.frontend.contracts.handler.*;
+import ch.supsi.connectfour.frontend.contracts.receiver.*;
+import ch.supsi.connectfour.frontend.contracts.receiver.ExitReceiver;
+import ch.supsi.connectfour.frontend.controller.AboutController;
 import ch.supsi.connectfour.frontend.controller.ColumnSelectorController;
 import ch.supsi.connectfour.frontend.controller.MenuBarController;
-import ch.supsi.connectfour.frontend.model.ConnectFourModel;
+import ch.supsi.connectfour.frontend.controller.PlayerInfoController;
+import ch.supsi.connectfour.frontend.model.*;
 import ch.supsi.connectfour.frontend.view.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,15 +24,19 @@ public class Initializer {
 
     public static void init(Stage stage) throws IOException, InstantiationException {
 
-        TranslationsController translationsController = TranslationsController.getInstance();
-        ConnectFourModel model = ConnectFourModel.getInstance();
-
-
         MySymbolInterface player1Symbol = new MySymbol('A', new MyColor(1.0,0,0));
         MySymbolInterface player2Symbol = new MySymbol('B', new MyColor(0,1.0,0));
+        Player player1 = new HumanPlayer("Player1", player1Symbol);
+        Player player2 = new HumanPlayer("Player2", player2Symbol);
 
-        model.addPlayer(new HumanPlayer("Player1", player1Symbol));
-        model.addPlayer(new HumanPlayer("Player2", player2Symbol));
+        TranslationsController translationsController = TranslationsController.getInstance();
+        ConnectFourModel model = ConnectFourModel.getInstance();
+        AboutModel aboutModel = AboutModel.getInstance();
+        PropertiesModel propertiesModel = PropertiesModel.getInstance();
+        LanguageModel languageModel = LanguageModel.getInstance();
+
+        model.addPlayer(player1);
+        model.addPlayer(player2);
         /*
             ###################################
                 Loading all fxml files
@@ -57,6 +55,14 @@ public class Initializer {
         AboutView aboutView = AboutView.getInstance();
         aboutView.initialize();
 
+        //PLAYER INFO VIEW
+        PlayerInfoView playerInfoView1 = new PlayerInfoView(0);
+        playerInfoView1.initialize();
+
+        PlayerInfoView playerInfoView2 = new PlayerInfoView(1);
+        playerInfoView2.initialize();
+
+
         // GAMEBOARD VIEW
         GameBoardView gameBoardView = GameBoardView.getInstance();
         gameBoardView.initialize();
@@ -71,6 +77,10 @@ public class Initializer {
         PlayerBarView playerBarView = PlayerBarView.getInstance();
         playerBarView.initialize();
         Parent playerBarViewParent = playerBarView.getParent();
+
+        //EXIT VIEW
+        ExitView exitView = ExitView.getInstance();
+        exitView.initialize();
 
         // Load main view and get controller
         FXMLLoader mainViewLoader = new FXMLLoader(Initializer.class.getResource("/view/mainview.fxml"));
@@ -89,21 +99,40 @@ public class Initializer {
                    Setup Controller
            ###################################
          */
-        MenuBarController menuBarController = MenuBarController.getInstance(model,model);
+        AboutController aboutController = AboutController.getInstance(aboutModel,propertiesModel);
+        PlayerInfoController playerInfoController1 = new PlayerInfoController(0,model,model);
+        PlayerInfoController playerInfoController2 = new PlayerInfoController(1,model, model);
+
+        MenuBarController menuBarController = MenuBarController.getInstance(model,model, languageModel);
         ColumnSelectorController columnSelectorController = ColumnSelectorController.getInstance(model);
          /*
            ###################################
                    Setup Receiver
            ###################################
          */
+        AboutReceiver<AboutHandler> aboutReceiver = aboutController;
+        PlayerInfoReceiver<PlayerInfoHandler> playerInfoReceiver1 = playerInfoController1;
+        PlayerInfoReceiver<PlayerInfoHandler> playerInfoReceiver2 = playerInfoController2;
         OpenFileReceiver<OpenFileHandler> openFileReceiver = menuBarController;
         MakeMoveReceiver<MakeMoveHandler> makeMoveReceiver = columnSelectorController;
         ExportFileReceiver<ExportFileHandler> exportFileReceiver = menuBarController;
+        ExitReceiver<ExitHandler> exitReceiver = menuBarController;
+        OkReceiver<OKHandler> okReceiver = menuBarController;
+        CancelReceiver<CancelHandler> cancelReceiver = menuBarController;
+        ChangeLanguageReceiver<ChangeLanguageHandler> languageReceiver = menuBarController;
+        SaveNewInfoReceiver<SaveNewInfoHandler> saveNewInfoReceiver1 = playerInfoController1;
+        SaveNewInfoReceiver<SaveNewInfoHandler> saveNewInfoReceiver2 = playerInfoController2;
         /*
            ###################################
                    Setup Command
            ###################################
          */
+        AboutCommand<AboutReceiver<AboutHandler>> aboutCommand = AboutCommand.create(aboutReceiver);
+
+        PlayerInfoCommand<PlayerInfoReceiver<PlayerInfoHandler>> playerInfoCommand1 = PlayerInfoCommand.create(playerInfoReceiver1);
+        PlayerInfoCommand<PlayerInfoReceiver<PlayerInfoHandler>> playerInfoCommand2 = PlayerInfoCommand.create(playerInfoReceiver2);
+        SaveNewInfoCommand<SaveNewInfoReceiver<SaveNewInfoHandler>> saveNewInfoCommand1 = SaveNewInfoCommand.create(saveNewInfoReceiver1);
+        SaveNewInfoCommand<SaveNewInfoReceiver<SaveNewInfoHandler>> saveNewInfoCommand2 = SaveNewInfoCommand.create(saveNewInfoReceiver2);
 
         OpenFileCommand<OpenFileReceiver<OpenFileHandler>> openFileCommand = OpenFileCommand.create(openFileReceiver);
         MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn0Command = MakeMoveCommand.create(makeMoveReceiver,0);
@@ -113,14 +142,23 @@ public class Initializer {
         MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn4Command = MakeMoveCommand.create(makeMoveReceiver,4);
         MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn5Command = MakeMoveCommand.create(makeMoveReceiver,5);
         MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn6Command = MakeMoveCommand.create(makeMoveReceiver,6);
-
         ExportFileCommand<ExportFileReceiver<ExportFileHandler>> exportFileCommand = ExportFileCommand.create(exportFileReceiver);
+        ExitCommand<ExitReceiver<ExitHandler>> exitCommand = ExitCommand.create(exitReceiver);
+        OkCommand<OkReceiver<OKHandler>> okCommand  = OkCommand.create(okReceiver);
+        CancelCommand<CancelReceiver<CancelHandler>> cancelCommand = CancelCommand.create(cancelReceiver, exitView.getStage());
+        ChangeLanguageCommand<ChangeLanguageReceiver<ChangeLanguageHandler>> languageEnUSCommand = ChangeLanguageCommand.create(languageReceiver, "en-US");        //Refactored
+        ChangeLanguageCommand<ChangeLanguageReceiver<ChangeLanguageHandler>> languageItCHCommand = ChangeLanguageCommand.create(languageReceiver, "it-CH");        //Refactored
+        ChangeLanguageCommand<ChangeLanguageReceiver<ChangeLanguageHandler>> languageFrFRCommand = ChangeLanguageCommand.create(languageReceiver, "fr-FR");        //Refactored
+        ChangeLanguageCommand<ChangeLanguageReceiver<ChangeLanguageHandler>> languageDeDECommand = ChangeLanguageCommand.create(languageReceiver, "de-DE");        //Refactored
          /*
            ###################################
                Linking Component - Command
            ###################################
          */
+        menuBarView.createAboutBehavior(aboutCommand);
         menuBarView.createOpenMenuItemBehaviour(openFileCommand);
+        playerBarView.createEditCharacteristicsPlayer1Behavior(playerInfoCommand1);
+        playerBarView.createEditCharacteristicsPlayer2Behavior(playerInfoCommand2);
         columnSelectorView.makeMoveColumn0(makeMoveColumn0Command);
         columnSelectorView.makeMoveColumn1(makeMoveColumn1Command);
         columnSelectorView.makeMoveColumn2(makeMoveColumn2Command);
@@ -128,23 +166,37 @@ public class Initializer {
         columnSelectorView.makeMoveColumn4(makeMoveColumn4Command);
         columnSelectorView.makeMoveColumn5(makeMoveColumn5Command);
         columnSelectorView.makeMoveColumn6(makeMoveColumn6Command);
-
+        menuBarView.createExitBehaviour(exitCommand);
+        exitView.createCancelBehaviour(cancelCommand);
+        exitView.createOKBehaviour(okCommand);
         menuBarView.createExportFileBehaviour(exportFileCommand);
-
+        menuBarView.createItCHMenuItemBehaviour(languageItCHCommand);
+        menuBarView.createEnUSMenuItemBehaviour(languageEnUSCommand);
+        menuBarView.createFrFRMenuItemBehaviour(languageFrFRCommand);
+        menuBarView.createDeDEMenuItemBehaviour(languageDeDECommand);
+        playerInfoView1.createSaveNewInfoBehavior(saveNewInfoCommand1);
+        playerInfoView2.createSaveNewInfoBehavior(saveNewInfoCommand2);
          /*
           ###################################
               Linking Observer - Notifier
            ###################################
 
          */
-
         model.addMoveObserver(gameBoardView);
         model.addObserver(infoBarView);
         model.addColumnFullObserver(columnSelectorView);
         model.addGameHasAWinnerObserver(infoBarView);
         model.addGameHasAWinnerObserver(columnSelectorView);
         model.addGameDrawObserver(infoBarView);
+        model.addClearViewObserver(gameBoardView);
+        model.addExitObserver(exitView);
+        aboutModel.addAboutObserver(aboutView);
 
+        model.addPlayerInfoObserver(playerInfoView1);
+        model.addPlayerInfoObserver(playerInfoView2);
+        model.addSaveNewInfoObserver(playerBarView);
+        model.addSaveNewInfoObserver(playerBarView);
+        model.addRepaintObserver(gameBoardView);
          /*
           ###################################
               Setup the stage

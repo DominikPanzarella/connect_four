@@ -11,22 +11,23 @@ import ch.supsi.connectfour.backend.service.gamelogic.board.GameBoardInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.game.GameStatusType;
 import ch.supsi.connectfour.backend.service.gamelogic.move.Move;
 import ch.supsi.connectfour.backend.service.gamelogic.move.MoveInterface;
+import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.Player;
-import ch.supsi.connectfour.frontend.contracts.handler.MakeMoveHandler;
-import ch.supsi.connectfour.frontend.contracts.handler.OpenFileHandler;
-import ch.supsi.connectfour.frontend.contracts.handler.ExportFileHandler;
+import ch.supsi.connectfour.frontend.contracts.handler.*;
 import ch.supsi.connectfour.frontend.contracts.observable.*;
-import ch.supsi.connectfour.frontend.presentable.GameDrawPresentable;
-import ch.supsi.connectfour.frontend.presentable.PlayerMovePresentable;
-import ch.supsi.connectfour.frontend.presentable.PlayerWinPresentable;
+import ch.supsi.connectfour.frontend.contracts.observer.SaveNewInfoObserver;
+import ch.supsi.connectfour.frontend.presentable.*;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import junit.extensions.RepeatedTest;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler, ExportFileHandler, MoveObservable, ColumnFullObservable, FeedbackObservable, GameHasAWinnerObservable, GameDrawObservable
+public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandler, ExitHandler ,OpenFileHandler, ExportFileHandler, MoveObservable, ColumnFullObservable, FeedbackObservable, GameHasAWinnerObservable, GameDrawObservable, ClearViewObservable, ExitObservable,PlayerInfoHandler, PlayerInfoObservable, SaveNewInfoHandler,SaveNewInfoObservable, RePaintObservable
 {
     private static final int MAX_PLAYERS = 2;
     private GameBoardInterface board;
@@ -39,6 +40,8 @@ public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler, Expor
 
     private static ConnectFourModel myself;
 
+    private boolean isChanged;
+
     protected ConnectFourModel(){
         this.board = GameBoard.getInstance();
         this.switchTurnController = SwitchTurnController.getInstance();
@@ -47,6 +50,7 @@ public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler, Expor
         this.gameController = GameController.getInstance();
         this.status = GameStatusType.IN_PROGRESS;
         this.moves = new ArrayList<>();
+        this.isChanged = false;
     }
 
     public static ConnectFourModel getInstance()
@@ -68,7 +72,7 @@ public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler, Expor
         File file = fileChooser.showOpenDialog(null);
         if(file != null){
             loadImage(file.getPath());
-            //TODO: notify feedback
+            notifyFeedbackObservers(new OpenFilePresentable());
         }
     }
 
@@ -92,18 +96,28 @@ public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler, Expor
 
         try{
             gameController.saveGame(file.toURI().getPath(), fileNameAndExtension[1], moves );
-            //notifyFeedbackObservers();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        notifyFeedbackObservers(new FileSavedPresentable());
 
 
     }
 
     private void loadImage(String path){
         try{
+            this.moves.clear();
+            notifyClearViewObservers();
+            switchTurnController.reset();
+            board.resetBoard();
             List<MoveInterface> loadedMoves = gameController.loadGame(path);
-            //TODO: adjust the moves with the corresponding player (name and colors can be changed)
+            for(int i=0; i<loadedMoves.size(); i++) {
+                MoveInterface move = loadedMoves.get(i);
+                makeMove(move.getColumn());
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -167,6 +181,7 @@ public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler, Expor
 
         moves.add(move);
         board.setCell(move);
+        isChanged = true;
         notifyMoveObservers(move);
 
         notifyFeedbackObservers(new PlayerMovePresentable(move));
@@ -190,4 +205,47 @@ public class ConnectFourModel implements MakeMoveHandler, OpenFileHandler, Expor
 
     }
 
+    @Override
+    public void exit() {
+        if(this.isChanged){
+            notifyExitObservers();
+        }
+        else{
+            System.exit(0);
+        }
+    }
+
+    @Override
+    public void cancel(Stage toClose) {
+        toClose.close();
+    }
+
+    @Override
+    public void ok() {
+        System.exit(0);
+    }
+
+    @Override
+    public void playerInfo(final int position) {
+        Player toWatch = switchTurnController.getPlayerAtIndex(position);
+        notifyPlayerInfosObservers(position, toWatch);
+    }
+
+    @Override
+    public void saveNewInfo(final int position,String newName, MySymbolInterface newSymbol) {
+        Player toUpdate = switchTurnController.getPlayerAtIndex(position);
+        String oldName = toUpdate.getName();
+
+        //TODO:update the boardview
+        List<MoveInterface> playerMoves = moves.stream()
+                .filter(move -> move.getPlayer().getName().equals(oldName))
+                .collect(Collectors.toList());
+
+
+        toUpdate.changeName(newName);
+        toUpdate.changeSymbol(newSymbol);
+
+        notifyRepaintObservers(playerMoves);
+
+    }
 }

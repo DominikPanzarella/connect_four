@@ -1,5 +1,7 @@
 package ch.supsi.connectfour.backend.exceptions;
 
+import java.io.IOException;
+
 public class FileReadingException extends RuntimeException
 {
     public FileReadingException(){
@@ -11,4 +13,7 @@ public class FileReadingException extends RuntimeException
     }
 
 
+    public FileReadingException(String s, IOException e) {
+        super(s,e);
+    }
 }

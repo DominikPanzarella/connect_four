@@ -1,6 +1,7 @@
 package ch.supsi.connectfour.frontend.view;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
+import ch.supsi.connectfour.frontend.contracts.observer.AboutObserver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.UncontrolledViewFxml;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -20,7 +21,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class AboutView implements UncontrolledViewFxml
+public class AboutView implements UncontrolledViewFxml, AboutObserver
 {
     @FXML
     private VBox developersVBox;

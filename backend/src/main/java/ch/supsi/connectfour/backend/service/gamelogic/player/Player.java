@@ -22,6 +22,10 @@ public abstract class Player implements OnMyTurnInterface
         this.name = name;
     }
 
+    public void changeSymbol(MySymbolInterface newSymbol){
+        this.symbol = newSymbol;
+    }
+
     public String getName(){
         return name;
     }

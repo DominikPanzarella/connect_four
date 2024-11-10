@@ -2,9 +2,12 @@ package ch.supsi.connectfour.frontend.view;
 
 import ch.supsi.connectfour.backend.controller.TranslationsController;
 import ch.supsi.connectfour.backend.service.gamelogic.move.Move;
+import ch.supsi.connectfour.backend.service.gamelogic.move.MoveInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.MyColorInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
+import ch.supsi.connectfour.frontend.contracts.observer.ClearViewObserver;
 import ch.supsi.connectfour.frontend.contracts.observer.MoveObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.RePaintObserver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.UncontrolledViewFxml;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,15 +17,18 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
-public class GameBoardView implements UncontrolledViewFxml, MoveObserver
+public class GameBoardView implements UncontrolledViewFxml, MoveObserver, ClearViewObserver, RePaintObserver
 {
     @FXML
     private GridPane gridPane;
 
     private static Parent parent;
     private static GameBoardView myself;
+    private final int ROWS = 6;
+    private final int COLS = 7;
 
     protected GameBoardView()
     {
@@ -72,10 +78,6 @@ public class GameBoardView implements UncontrolledViewFxml, MoveObserver
         final int row = move.getRow();
         final int col = move.getColumn();
         Button label = (Button)gridPane.lookup("#cell" + row+ col);
-        System.out.println(label);
-        // Retrieve the current player's color preference
-        label.setStyle("-fx-background-color: #"+"red" + ";");
-        label.setText("X");
 
         Character currentPlayerSymbol = move.getPlayer().getPlayerCharacter();
         MyColorInterface playerColors = move.getPlayer().getPlayerColors();
@@ -83,5 +85,35 @@ public class GameBoardView implements UncontrolledViewFxml, MoveObserver
         System.out.println(playerColor);
         label.setStyle("-fx-background-color: " + playerColor + ";");
         label.setText(currentPlayerSymbol.toString());
+    }
+
+    @Override
+    public void clearView() {
+        for(int i=0;i<ROWS; i++)
+        {
+            for(int j=0; j<COLS; j++)
+            {
+                Button label = (Button)gridPane.lookup("#cell" + i+ j);
+                label.setStyle("-fx-background-color: " + "white" + ";");
+                label.setText("");
+            }
+        }
+    }
+
+
+    @Override
+    public void repaint(List<MoveInterface> moves) {
+        for(MoveInterface move : moves){
+            final int row = move.getRow();
+            final int col = move.getColumn();
+
+            Button label = (Button)gridPane.lookup("#cell" + row+ col);
+            Character currentPlayerSymbol = move.getPlayer().getPlayerCharacter();
+            MyColorInterface playerColors = move.getPlayer().getPlayerColors();
+            String playerColor = playerColors.toHex();
+            System.out.println(playerColor);
+            label.setStyle("-fx-background-color: " + playerColor + ";");
+            label.setText(currentPlayerSymbol.toString());
+        }
     }
 }
