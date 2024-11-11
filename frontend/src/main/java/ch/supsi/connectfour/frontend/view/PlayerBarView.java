@@ -5,11 +5,19 @@ import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.Player;
 import ch.supsi.connectfour.frontend.command.ChangeLanguageCommand;
 import ch.supsi.connectfour.frontend.command.PlayerInfoCommand;
+import ch.supsi.connectfour.frontend.command.RedoCommand;
+import ch.supsi.connectfour.frontend.command.UndoCommand;
 import ch.supsi.connectfour.frontend.contracts.handler.ChangeLanguageHandler;
 import ch.supsi.connectfour.frontend.contracts.handler.PlayerInfoHandler;
+import ch.supsi.connectfour.frontend.contracts.handler.UndoHandler;
+import ch.supsi.connectfour.frontend.contracts.handler.RedoHandler;
 import ch.supsi.connectfour.frontend.contracts.observer.SaveNewInfoObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.ToggleRedoButtonObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.ToggleUndoButtonObserver;
 import ch.supsi.connectfour.frontend.contracts.receiver.ChangeLanguageReceiver;
 import ch.supsi.connectfour.frontend.contracts.receiver.PlayerInfoReceiver;
+import ch.supsi.connectfour.frontend.contracts.receiver.RedoReceiver;
+import ch.supsi.connectfour.frontend.contracts.receiver.UndoReceiver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.ControlledViewFxml;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +28,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class PlayerBarView implements ControlledViewFxml, SaveNewInfoObserver
+public class PlayerBarView implements ControlledViewFxml, SaveNewInfoObserver, ToggleUndoButtonObserver, ToggleRedoButtonObserver
 {
     @FXML
     Button readCharacteristicsPlayer1Button;
@@ -63,6 +71,15 @@ public class PlayerBarView implements ControlledViewFxml, SaveNewInfoObserver
             command.execute();
         });
     }
+
+    public <T extends UndoCommand<? extends UndoReceiver<UndoHandler>>> void createUndoBehaviour(T command){
+        undoButton.setOnAction(action->command.execute());
+    }
+
+    public <T extends RedoCommand<? extends RedoReceiver<RedoHandler>>> void createRedoBehaviour(T command){
+        redoButton.setOnAction(action->command.execute());
+    }
+
     public static PlayerBarView getInstance()
     {
         if(myself==null)
@@ -86,7 +103,8 @@ public class PlayerBarView implements ControlledViewFxml, SaveNewInfoObserver
 
     @Override
     public void initialize() {
-
+        undoButton.setDisable(true);
+        redoButton.setDisable(true);
     }
 
     @Override
@@ -123,5 +141,15 @@ public class PlayerBarView implements ControlledViewFxml, SaveNewInfoObserver
 
         player2Name.setText(newName);
         player2Symbol.setText(newSymbol.getCharacter().toString());
+    }
+
+    @Override
+    public void toggleRedoButton(boolean state) {
+        redoButton.setDisable(state);
+    }
+
+    @Override
+    public void toggleUndoButton(boolean state) {
+        undoButton.setDisable(state);
     }
 }

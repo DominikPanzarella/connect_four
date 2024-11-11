@@ -5,9 +5,7 @@ import ch.supsi.connectfour.backend.service.gamelogic.move.Move;
 import ch.supsi.connectfour.backend.service.gamelogic.move.MoveInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.MyColorInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
-import ch.supsi.connectfour.frontend.contracts.observer.ClearViewObserver;
-import ch.supsi.connectfour.frontend.contracts.observer.MoveObserver;
-import ch.supsi.connectfour.frontend.contracts.observer.RePaintObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.*;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.UncontrolledViewFxml;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +18,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class GameBoardView implements UncontrolledViewFxml, MoveObserver, ClearViewObserver, RePaintObserver
+public class GameBoardView implements UncontrolledViewFxml, MoveObserver, ClearViewObserver, RePaintObserver, UndoObserver, RedoObserver
 {
     @FXML
     private GridPane gridPane;
@@ -115,5 +113,16 @@ public class GameBoardView implements UncontrolledViewFxml, MoveObserver, ClearV
             label.setStyle("-fx-background-color: " + playerColor + ";");
             label.setText(currentPlayerSymbol.toString());
         }
+    }
+
+    @Override
+    public void redo(List<MoveInterface> data) {
+        clearView();
+        repaint(data);
+    }
+
+    @Override
+    public void undo(List<MoveInterface> data) {
+        repaint(data);
     }
 }

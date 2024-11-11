@@ -5,6 +5,8 @@ import ch.supsi.connectfour.backend.service.gamelogic.move.Move;
 import ch.supsi.connectfour.backend.service.gamelogic.move.MoveInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.Player;
 
+import java.util.List;
+
 public class GameBoard implements GameBoardInterface
 {
     private static final int NUM_ROWS = 6;
@@ -85,6 +87,37 @@ public class GameBoard implements GameBoardInterface
     @Override
     public void resetBoard() {
         board = new Player[NUM_ROWS][NUM_COLS];
+    }
+
+    @Override
+    public void unsetCell(MoveInterface move) {
+        final int row       = move.getRow();
+        final int col       = move.getColumn();
+        board[row][col] = null ;
+
+    }
+
+    @Override
+    public void setCells(List<MoveInterface> moves) {
+        resetBoard();
+        for(MoveInterface move : moves)
+        {
+            final int row       = move.getRow();
+            final int col       = move.getColumn();
+            final Player player = move.getPlayer();
+
+            board[row][col] = player;
+        }
+    }
+
+    @Override
+    public int getWidth() {
+        return NUM_ROWS;
+    }
+
+    @Override
+    public int getHeight() {
+        return NUM_COLS;
     }
 
     //Helper methode

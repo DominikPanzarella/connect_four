@@ -111,7 +111,7 @@ public class Initializer {
         MenuBarController menuBarController = MenuBarController.getInstance(model,model, languageModel, model);
         ColumnSelectorController columnSelectorController = ColumnSelectorController.getInstance(model);
         MoreInfoController moreInfoController = MoreInfoController.getInstance(moreInfoModel, propertiesModel);
-
+        PlayerBarController playerBarController = PlayerBarController.getInstance(model,model);
          /*
            ###################################
                    Setup Receiver
@@ -131,6 +131,8 @@ public class Initializer {
         SaveNewInfoReceiver<SaveNewInfoHandler> saveNewInfoReceiver2 = playerInfoController2;
         NewGameReceiver<NewGameHandler> newGameReceiver = menuBarController;
         MoreInfoReceiver<MoreInfoHandler> moreInfoReceiver = moreInfoController;
+        UndoReceiver<UndoHandler> undoReceiver = playerBarController;
+        RedoReceiver<RedoHandler> redoReceiver = playerBarController;
         /*
            ###################################
                    Setup Command
@@ -159,6 +161,8 @@ public class Initializer {
         ChangeLanguageCommand<ChangeLanguageReceiver<ChangeLanguageHandler>> languageFrFRCommand = ChangeLanguageCommand.create(languageReceiver, "fr-FR");        //Refactored
         ChangeLanguageCommand<ChangeLanguageReceiver<ChangeLanguageHandler>> languageDeDECommand = ChangeLanguageCommand.create(languageReceiver, "de-DE");        //Refactored
         MoreInfoCommand<MoreInfoReceiver<MoreInfoHandler>> moreInfoCommand = MoreInfoCommand.create(moreInfoReceiver);
+        UndoCommand<UndoReceiver<UndoHandler>> undoCommand = UndoCommand.create(undoReceiver);
+        RedoCommand<RedoReceiver<RedoHandler>> redoCommand = RedoCommand.create(redoReceiver);
          /*
            ###################################
                Linking Component - Command
@@ -187,6 +191,9 @@ public class Initializer {
         menuBarView.createNewGameBehaviour(newGameCommand);
         playerInfoView1.createSaveNewInfoBehavior(saveNewInfoCommand1);
         playerInfoView2.createSaveNewInfoBehavior(saveNewInfoCommand2);
+        playerBarView.createUndoBehaviour(undoCommand);
+        playerBarView.createRedoBehaviour(redoCommand);
+
          /*
           ###################################
               Linking Observer - Notifier
@@ -208,6 +215,12 @@ public class Initializer {
         model.addSaveNewInfoObserver(playerBarView);
         model.addRepaintObserver(gameBoardView);
         moreInfoModel.addMoreInfoObserver(moreInfoView);
+        model.addUndoButtonObserver(playerBarView);
+        model.addORedoButtonObserver(playerBarView);
+        model.addRedoObserver(gameBoardView);
+        model.addUndoObserver(gameBoardView);
+        model.addNewGameObserver(columnSelectorView);
+        model.addFreeColumnObserver(columnSelectorView);
          /*
           ###################################
               Setup the stage

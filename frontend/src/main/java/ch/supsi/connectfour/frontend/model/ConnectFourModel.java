@@ -15,19 +15,20 @@ import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.Player;
 import ch.supsi.connectfour.frontend.contracts.handler.*;
 import ch.supsi.connectfour.frontend.contracts.observable.*;
-import ch.supsi.connectfour.frontend.contracts.observer.SaveNewInfoObserver;
+import ch.supsi.connectfour.frontend.memento.Memento;
+import ch.supsi.connectfour.frontend.memento.MementoCaretaker;
 import ch.supsi.connectfour.frontend.presentable.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import junit.extensions.RepeatedTest;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandler, ExitHandler ,OpenFileHandler, ExportFileHandler, MoveObservable, ColumnFullObservable, FeedbackObservable, GameHasAWinnerObservable, GameDrawObservable, ClearViewObservable, ExitObservable,PlayerInfoHandler, PlayerInfoObservable, SaveNewInfoHandler,SaveNewInfoObservable, RePaintObservable, NewGameHandler
+public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandler, ExitHandler ,OpenFileHandler, ExportFileHandler, MoveObservable, ColumnFullObservable, FeedbackObservable, GameHasAWinnerObservable, GameDrawObservable, ClearViewObservable, ExitObservable,PlayerInfoHandler, PlayerInfoObservable, SaveNewInfoHandler,SaveNewInfoObservable, RePaintObservable, NewGameHandler, UndoHandler, RedoHandler,ToggleUndoButtonObservable, ToggleRedoButtonObservable, UndoObservable, RedoObservable, NewGameObservable, FreeColumnObservable
 {
     private static final int MAX_PLAYERS = 2;
     private GameBoardInterface board;
@@ -36,7 +37,8 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
     private TranslationsController translationsController;
     private PreferencesController preferencesController;
     private GameStatusType status;
-    private final List<MoveInterface> moves;
+    private List<MoveInterface> moves;
+    private MementoCaretaker<List<MoveInterface>> movesMementoCaretaker;
 
     private static ConnectFourModel myself;
 
@@ -50,6 +52,8 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
         this.gameController = GameController.getInstance();
         this.status = GameStatusType.IN_PROGRESS;
         this.moves = new ArrayList<>();
+        this.movesMementoCaretaker = new MementoCaretaker<>();
+        movesMementoCaretaker.addState(new Memento<>(new ArrayList<>()));
         this.isChanged = false;
     }
 
@@ -71,7 +75,7 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
 
         File file = fileChooser.showOpenDialog(null);
         if(file != null){
-            loadImage(file.getPath());
+            loadFile(file.getPath());
             notifyFeedbackObservers(new OpenFilePresentable());
         }
     }
@@ -106,7 +110,7 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
 
     }
 
-    private void loadImage(String path){
+    private void loadFile(String path){
         try{
             this.moves.clear();
             notifyClearViewObservers();
@@ -117,6 +121,8 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
                 MoveInterface move = loadedMoves.get(i);
                 makeMove(move.getColumn());
             }
+
+            enableSelectorButtons();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -182,10 +188,11 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
         moves.add(move);
         board.setCell(move);
         isChanged = true;
+        movesMementoCaretaker.addState(new Memento<>(new ArrayList<>(moves)));
         notifyMoveObservers(move);
-
         notifyFeedbackObservers(new PlayerMovePresentable(move));
-
+        notifyUndoButtonObservers(false);
+        notifyRedoButtonObservers(false);
         if(board.isColumnFull(column))
             notifyColumnFullObservers(column);
 
@@ -266,9 +273,53 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
         switchTurnController.reset();
         board.resetBoard();
         this.status = GameStatusType.IN_PROGRESS;
-        this.moves.clear();
+        this.moves = new ArrayList<>();
         this.isChanged = false;
+        this.movesMementoCaretaker = new MementoCaretaker<>();
+        movesMementoCaretaker.addState(new Memento<>(new ArrayList<>()));
         notifyClearViewObservers();
+        notifyNewGameObservers();
         notifyFeedbackObservers(new NewGamePresentable());
     }
+
+    @Override
+    public void undo() {
+        Memento<List<MoveInterface>> previousState = movesMementoCaretaker.undo();
+        if (previousState != null) {
+            this.moves = new ArrayList<>(previousState.getState());
+            board.setCells(moves);
+            enableSelectorButtons();
+            notifyClearViewObservers();
+            notifyUndoObservers(moves);
+            notifyRedoButtonObservers(!movesMementoCaretaker.canRedo()); // Enable redo if possible
+            notifyUndoButtonObservers(!movesMementoCaretaker.canUndo()); // Disable undo if no more undos
+        } else {
+            notifyUndoButtonObservers(true); // Disable undo if at the beginning
+        }
+    }
+
+    @Override
+    public void redo() {
+        Memento<List<MoveInterface>> nextState = movesMementoCaretaker.redo();
+        if (nextState != null) {
+            this.moves = new ArrayList<>(nextState.getState());
+            board.setCells(moves);
+
+
+
+            notifyClearViewObservers();
+            notifyRedoObservers(moves);
+            notifyUndoButtonObservers(!movesMementoCaretaker.canUndo()); // Enable undo if possible
+            notifyRedoButtonObservers(!movesMementoCaretaker.canRedo()); // Disable redo if no more redos
+        } else {
+            notifyRedoButtonObservers(true); // Disable redo if at the end
+        }
+    }
+
+    private void enableSelectorButtons(){
+        for(int i=0; i<board.getWidth(); i++)
+            if(!board.isColumnFull(i))
+                notifyFreeColumnObservers(i);
+    }
+
 }

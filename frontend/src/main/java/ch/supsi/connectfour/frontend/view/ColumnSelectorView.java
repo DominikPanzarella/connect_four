@@ -6,7 +6,9 @@ import ch.supsi.connectfour.frontend.contracts.handler.MakeMoveHandler;
 import ch.supsi.connectfour.frontend.contracts.observable.ColumnFullObservable;
 import ch.supsi.connectfour.frontend.contracts.observable.MoveObservable;
 import ch.supsi.connectfour.frontend.contracts.observer.ColumnFullObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.FreeColumnObserver;
 import ch.supsi.connectfour.frontend.contracts.observer.GameHasAWinnerObserver;
+import ch.supsi.connectfour.frontend.contracts.observer.NewGameObserver;
 import ch.supsi.connectfour.frontend.contracts.receiver.MakeMoveReceiver;
 import ch.supsi.connectfour.frontend.contracts.viewContracts.ControlledViewFxml;
 import ch.supsi.connectfour.frontend.presentable.Presentable;
@@ -20,7 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ColumnSelectorView implements ControlledViewFxml, MoveObservable, ColumnFullObserver, GameHasAWinnerObserver
+public class ColumnSelectorView implements ControlledViewFxml, MoveObservable, ColumnFullObserver, GameHasAWinnerObserver, NewGameObserver, FreeColumnObserver
 {
     @FXML
     private GridPane columnPane;
@@ -140,5 +142,44 @@ public class ColumnSelectorView implements ControlledViewFxml, MoveObservable, C
         col4.setDisable(true);
         col5.setDisable(true);
         col6.setDisable(true);
+    }
+
+    @Override
+    public void newGame() {
+        col0.setDisable(false);
+        col1.setDisable(false);
+        col2.setDisable(false);
+        col3.setDisable(false);
+        col4.setDisable(false);
+        col5.setDisable(false);
+        col6.setDisable(false);
+    }
+
+    @Override
+    public void freeColumn(int toFree) {
+        switch (toFree)
+        {
+            case 0:
+                col0.setDisable(false);
+                break;
+            case 1:
+                col1.setDisable(false);
+                break;
+            case 2:
+                col2.setDisable(false);
+                break;
+            case 3:
+                col3.setDisable(false);
+                break;
+            case 4:
+                col4.setDisable(false);
+                break;
+            case 5:
+                col5.setDisable(false);
+                break;
+            case 6:
+                col6.setDisable(false);
+                break;
+        }
     }
 }
