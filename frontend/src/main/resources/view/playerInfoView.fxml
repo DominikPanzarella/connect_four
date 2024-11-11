@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<BorderPane prefHeight="280.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <VBox fx:id="playerVBox" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" spacing="20" style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+
+            <!-- Title of the Window -->
+            <Label text="Informazioni Giocatore" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2d4059;" />
+
+            <!-- Player Name Section -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Nome:" style="-fx-text-fill: #4a4a4a;" />
+                <TextField fx:id="nameTextField" promptText="Inserisci il nome" style="-fx-background-radius: 5; -fx-padding: 5;" />
+            </HBox>
+
+            <!-- Player Symbol Section -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Simbolo:" style="-fx-text-fill: #4a4a4a;" />
+                <ComboBox fx:id="symbolComboBox" promptText="Seleziona il simbolo" style="-fx-background-radius: 5; -fx-padding: 5;" />
+            </HBox>
+
+            <!-- Player Color Section -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Colore:" style="-fx-text-fill: #4a4a4a;" />
+                <ColorPicker fx:id="colorPicker" style="-fx-background-radius: 5; -fx-padding: 5;" />
+            </HBox>
+
+            <!-- Save Button -->
+            <Button text="Salva" fx:id="saveButton" style="-fx-background-color: #2d4059; -fx-text-fill: #ffffff; -fx-background-radius: 5; -fx-padding: 8;" />
+
+        </VBox>
+    </center>
+
+</BorderPane>
+

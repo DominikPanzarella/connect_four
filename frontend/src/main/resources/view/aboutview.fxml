@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <VBox fx:id="developersVBox" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" spacing="10" style="-fx-padding: 15;">
+            <Label text="%ui.popup.header.title" style="-fx-font-size: 20; -fx-font-weight: bold;" />
+
+            <!-- HBox per Version -->
+            <HBox spacing="5">
+                <Label text="%ui.popup.body.version" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+                <Label fx:id="versionLabel" style="-fx-font-size: 16; -fx-alignment: CENTER_LEFT;" />
+            </HBox>
+
+            <!-- HBox per Build -->
+            <HBox spacing="5">
+                <Label text="%ui.popup.body.datetime" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+                <Label fx:id="dateLabel" style="-fx-font-size: 16; -fx-alignment: CENTER_LEFT;" />
+            </HBox>
+
+            <Label text="%ui.popup.body.authors" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 10 0 0 0;" />
+            <TableView fx:id="developersTable" prefHeight="200.0" prefWidth="400.0" style="-fx-padding: 10;">
+                <columns>
+                    <TableColumn fx:id="emailColumn" text="Email" prefWidth="200.0" />
+                    <TableColumn fx:id="nameColumn" text="Name" prefWidth="200.0" />
+                </columns>
+            </TableView>
+
+        </VBox>
+    </center>
+</BorderPane>
+
+
