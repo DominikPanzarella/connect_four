@@ -97,13 +97,13 @@ public class PlayerBarView implements ControlledViewFxml, SaveNewInfoObserver
 
 
     @Override
-    public void saveNewInfo(String playerID, String newName, MySymbolInterface newSymbol) {
-        switch (playerID){
-            case "player1":
+    public void saveNewInfo(final int position, String newName, MySymbolInterface newSymbol) {
+        switch (position){
+            case 0:
                 updatePlayer1Infos(newName, newSymbol);
                 break;
 
-            case "player2":
+            case 1:
                 updatePlayer2Infos(newName, newSymbol);
                 break;
         }

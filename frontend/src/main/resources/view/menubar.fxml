@@ -6,7 +6,6 @@
         <MenuItem fx:id="newMenuItem" mnemonicParsing="false" text="%ui.menuitem.new"/>
         <MenuItem fx:id="openMenuItem" mnemonicParsing="false" text="%ui.menuitem.open"/>
         <SeparatorMenuItem mnemonicParsing="false" />
-        <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="%ui.menuitem.save"/>
         <MenuItem fx:id="saveAsMenuItem" mnemonicParsing="false" text="%ui.menuitem.saveas"/>
         <SeparatorMenuItem mnemonicParsing="false"/>
         <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" text="%ui.menuitem.quit"/>

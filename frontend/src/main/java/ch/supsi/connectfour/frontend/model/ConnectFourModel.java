@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandler, ExitHandler ,OpenFileHandler, ExportFileHandler, MoveObservable, ColumnFullObservable, FeedbackObservable, GameHasAWinnerObservable, GameDrawObservable, ClearViewObservable, ExitObservable,PlayerInfoHandler, PlayerInfoObservable, SaveNewInfoHandler,SaveNewInfoObservable, RePaintObservable
+public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandler, ExitHandler ,OpenFileHandler, ExportFileHandler, MoveObservable, ColumnFullObservable, FeedbackObservable, GameHasAWinnerObservable, GameDrawObservable, ClearViewObservable, ExitObservable,PlayerInfoHandler, PlayerInfoObservable, SaveNewInfoHandler,SaveNewInfoObservable, RePaintObservable, NewGameHandler
 {
     private static final int MAX_PLAYERS = 2;
     private GameBoardInterface board;
@@ -246,6 +246,17 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
         toUpdate.changeSymbol(newSymbol);
 
         notifyRepaintObservers(playerMoves);
+        notifySaveNewInfosObservers(position, newName, newSymbol);
 
+    }
+
+    @Override
+    public void newGame() {
+        switchTurnController.reset();
+        board.resetBoard();
+        this.status = GameStatusType.IN_PROGRESS;
+        this.moves.clear();
+        this.isChanged = false;
+        notifyClearViewObservers();
     }
 }

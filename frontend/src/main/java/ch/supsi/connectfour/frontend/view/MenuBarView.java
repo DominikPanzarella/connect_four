@@ -84,7 +84,7 @@ public class MenuBarView implements ControlledViewFxml
     @Override
     public void initialize() {
         //saveAsMenuItem.setDisable(true);
-        saveMenuItem.setDisable(true);
+        //saveMenuItem.setDisable(true);
 
     }
 
@@ -99,6 +99,10 @@ public class MenuBarView implements ControlledViewFxml
 
     public <T extends ExportFileCommand<? extends ExportFileReceiver<ExportFileHandler>>> void createExportFileBehaviour(T command){
         saveAsMenuItem.setOnAction(action->command.execute());
+    }
+
+    public <T extends NewGameCommand<? extends NewGameReceiver<NewGameHandler>>> void createNewGameBehaviour(T command){
+        newMenuItem.setOnAction(action->command.execute());
     }
 
     public <T extends ExitCommand<? extends ExitReceiver<ExitHandler>>> void createExitBehaviour(T command){

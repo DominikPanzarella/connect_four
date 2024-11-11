@@ -4,5 +4,5 @@ import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
 
 public interface SaveNewInfoObserver extends Observer
 {
-    void saveNewInfo(final String playerID,final String newName, final MySymbolInterface newSymbol);
+    void saveNewInfo(final int position,final String newName, final MySymbolInterface newSymbol);
 }

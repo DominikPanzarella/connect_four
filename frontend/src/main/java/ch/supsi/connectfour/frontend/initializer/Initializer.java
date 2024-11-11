@@ -10,11 +10,15 @@ import ch.supsi.connectfour.frontend.controller.AboutController;
 import ch.supsi.connectfour.frontend.controller.ColumnSelectorController;
 import ch.supsi.connectfour.frontend.controller.MenuBarController;
 import ch.supsi.connectfour.frontend.controller.PlayerInfoController;
+import ch.supsi.connectfour.frontend.mediator.*;
 import ch.supsi.connectfour.frontend.model.*;
 import ch.supsi.connectfour.frontend.view.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -103,7 +107,7 @@ public class Initializer {
         PlayerInfoController playerInfoController1 = new PlayerInfoController(0,model,model);
         PlayerInfoController playerInfoController2 = new PlayerInfoController(1,model, model);
 
-        MenuBarController menuBarController = MenuBarController.getInstance(model,model, languageModel);
+        MenuBarController menuBarController = MenuBarController.getInstance(model,model, languageModel, model);
         ColumnSelectorController columnSelectorController = ColumnSelectorController.getInstance(model);
          /*
            ###################################
@@ -122,6 +126,8 @@ public class Initializer {
         ChangeLanguageReceiver<ChangeLanguageHandler> languageReceiver = menuBarController;
         SaveNewInfoReceiver<SaveNewInfoHandler> saveNewInfoReceiver1 = playerInfoController1;
         SaveNewInfoReceiver<SaveNewInfoHandler> saveNewInfoReceiver2 = playerInfoController2;
+        NewGameReceiver<NewGameHandler> newGameReceiver = menuBarController;
+
         /*
            ###################################
                    Setup Command
@@ -133,6 +139,7 @@ public class Initializer {
         PlayerInfoCommand<PlayerInfoReceiver<PlayerInfoHandler>> playerInfoCommand2 = PlayerInfoCommand.create(playerInfoReceiver2);
         SaveNewInfoCommand<SaveNewInfoReceiver<SaveNewInfoHandler>> saveNewInfoCommand1 = SaveNewInfoCommand.create(saveNewInfoReceiver1);
         SaveNewInfoCommand<SaveNewInfoReceiver<SaveNewInfoHandler>> saveNewInfoCommand2 = SaveNewInfoCommand.create(saveNewInfoReceiver2);
+        NewGameCommand<NewGameReceiver<NewGameHandler>> newGameCommand = NewGameCommand.create(newGameReceiver);
 
         OpenFileCommand<OpenFileReceiver<OpenFileHandler>> openFileCommand = OpenFileCommand.create(openFileReceiver);
         MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn0Command = MakeMoveCommand.create(makeMoveReceiver,0);
@@ -174,6 +181,7 @@ public class Initializer {
         menuBarView.createEnUSMenuItemBehaviour(languageEnUSCommand);
         menuBarView.createFrFRMenuItemBehaviour(languageFrFRCommand);
         menuBarView.createDeDEMenuItemBehaviour(languageDeDECommand);
+        menuBarView.createNewGameBehaviour(newGameCommand);
         playerInfoView1.createSaveNewInfoBehavior(saveNewInfoCommand1);
         playerInfoView2.createSaveNewInfoBehavior(saveNewInfoCommand2);
          /*
@@ -207,6 +215,47 @@ public class Initializer {
         stage.setScene(new Scene(mainView));
         stage.setResizable(false);
         // stage.getIcons().add(new Image(Objects.requireNonNull(Initializer.class.getResourceAsStream("/logo/2DEditorLogo.png"))));
+
+         /*
+          ###################################
+              key combination shortcut setup
+           ###################################
+         */
+
+        KeyCombination makeMoveColumn0Combination = new KeyCodeCombination(KeyCode.DIGIT0);
+        KeyCombination makeMoveColumn1Combination = new KeyCodeCombination(KeyCode.DIGIT1);
+        KeyCombination makeMoveColumn2Combination = new KeyCodeCombination(KeyCode.DIGIT2);
+        KeyCombination makeMoveColumn3Combination = new KeyCodeCombination(KeyCode.DIGIT3);
+        KeyCombination makeMoveColumn4Combination = new KeyCodeCombination(KeyCode.DIGIT4);
+        KeyCombination makeMoveColumn5Combination = new KeyCodeCombination(KeyCode.DIGIT5);
+        KeyCombination makeMoveColumn6Combination = new KeyCodeCombination(KeyCode.DIGIT6);
+
+        KeyCombination exportFileKeyCombination = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        KeyCombination exitKeyCombination = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
+        KeyCombination aboutKeyCombination = new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN);
+        KeyCombination openFileKeyCombination = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
+        KeyCombination newGameKeyCombination = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+        /*
+          ###################################
+              Mediator setup
+           ###################################
+         */
+
+        MakeMoveMediator<ColumnSelectorController> makeMoveColumn0Mediator = new MakeMoveMediator<>(0,stage, columnSelectorController, makeMoveColumn0Combination);
+        MakeMoveMediator<ColumnSelectorController> makeMoveColumn1Mediator = new MakeMoveMediator<>(1,stage, columnSelectorController, makeMoveColumn1Combination);
+        MakeMoveMediator<ColumnSelectorController> makeMoveColumn2Mediator = new MakeMoveMediator<>(2,stage, columnSelectorController, makeMoveColumn2Combination);
+        MakeMoveMediator<ColumnSelectorController> makeMoveColumn3Mediator = new MakeMoveMediator<>(3,stage, columnSelectorController, makeMoveColumn3Combination);
+        MakeMoveMediator<ColumnSelectorController> makeMoveColumn4Mediator = new MakeMoveMediator<>(4,stage, columnSelectorController, makeMoveColumn4Combination);
+        MakeMoveMediator<ColumnSelectorController> makeMoveColumn5Mediator = new MakeMoveMediator<>(5,stage, columnSelectorController, makeMoveColumn5Combination);
+        MakeMoveMediator<ColumnSelectorController> makeMoveColumn6Mediator = new MakeMoveMediator<>(6,stage, columnSelectorController, makeMoveColumn6Combination);
+
+        ExportFileMediator.getInstance(stage, menuBarController, exportFileKeyCombination);
+        ExitMediator.getInstance(stage,menuBarController, exitKeyCombination);
+        AboutMediator.getInstance(stage, aboutController, aboutKeyCombination);
+        OpenFileMediator.getInstance(stage, menuBarController, openFileKeyCombination);
+        NewGameMediator.getInstance(stage,menuBarController,newGameKeyCombination);
+
+
         stage.show();
     }
 

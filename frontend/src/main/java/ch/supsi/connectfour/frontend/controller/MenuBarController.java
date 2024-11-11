@@ -12,7 +12,8 @@ public class MenuBarController implements
         ExitReceiver<ExitHandler>,
         CancelReceiver<CancelHandler>,
         OkReceiver<OKHandler>,
-        ChangeLanguageReceiver<ChangeLanguageHandler>
+        ChangeLanguageReceiver<ChangeLanguageHandler>,
+        NewGameReceiver<NewGameHandler>
 {
     private OpenFileHandler openFileModel;
     private ExportFileHandler exportModel;
@@ -20,22 +21,24 @@ public class MenuBarController implements
     private OKHandler okModel;
     private CancelHandler cancelModel;
     private ChangeLanguageHandler changeLanguageModel;
+    private NewGameHandler newGameModel;
 
     private static MenuBarController myself;
 
-    protected MenuBarController(OpenFileHandler openFileModel, ExportFileHandler exportModel,ChangeLanguageHandler changeLanguageModel) {
+    protected MenuBarController(OpenFileHandler openFileModel, ExportFileHandler exportModel,ChangeLanguageHandler changeLanguageModel, NewGameHandler newGameModel) {
         this.openFileModel = openFileModel;
         this.exportModel = exportModel;
         this.exitModel = ConnectFourModel.getInstance();
         this.cancelModel = ConnectFourModel.getInstance();
         this.okModel = ConnectFourModel.getInstance();
         this.changeLanguageModel = changeLanguageModel;
+        this.newGameModel = newGameModel;
 
     }
 
-    public static MenuBarController getInstance(OpenFileHandler openFileModel,ExportFileHandler exportModel,ChangeLanguageHandler changeLanguageModel) {
+    public static MenuBarController getInstance(OpenFileHandler openFileModel,ExportFileHandler exportModel,ChangeLanguageHandler changeLanguageModel,NewGameHandler newGameModel) {
         if (myself == null) {
-            myself = new MenuBarController(openFileModel,exportModel,changeLanguageModel);
+            myself = new MenuBarController(openFileModel,exportModel,changeLanguageModel,newGameModel);
         }
         return myself;
     }
@@ -69,5 +72,10 @@ public class MenuBarController implements
     @Override
     public void changeLanguage(String languageTag) {
         changeLanguageModel.changeLanguage(languageTag);
+    }
+
+    @Override
+    public void newGame() {
+        newGameModel.newGame();
     }
 }
