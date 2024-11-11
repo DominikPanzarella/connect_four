@@ -59,6 +59,31 @@ The project follows a multilayer architecture, separating the frontend from the 
 6. **Edit Player Settings**: Modify player settings via "Settings" -> "Edit Player".
 7. **Undo or Redo Move**: Access "Undo" and "Redo" options in the "Edit" menu or use shortcuts.
 8. **Close Game**: Select "Game" -> "Close" to end the current game.
+## Clone
+
+```sh
+git clone https://github.com/DominikPanzarella/connect_four.git
+```
+
+## Install
+
+Install the backend library
+
+```sh
+cd backed && mvn clean install
+```
+
+Create the jar file
+
+```sh
+cd frontend && mvn clean package
+```
+
+## Usage
+
+```sh
+java -jar target/2dEditor-jar-with-dependencies.jar
+```
 
 ## Contribute
 
