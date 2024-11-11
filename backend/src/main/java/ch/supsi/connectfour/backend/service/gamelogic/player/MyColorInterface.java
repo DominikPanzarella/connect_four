@@ -6,4 +6,5 @@ public interface MyColorInterface
     double getGreenChannel();
     double getBlueChannel();
     String toHex();
+    boolean equals(MyColorInterface color);
 }

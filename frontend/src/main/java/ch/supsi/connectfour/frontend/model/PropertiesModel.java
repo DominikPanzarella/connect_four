@@ -17,6 +17,7 @@ public class PropertiesModel implements Observable, PropertiesHandler
 
     private List<String> infos = new LinkedList<>();
     private Map<String, String> developers = new HashMap<>();
+    private Map<String,String> shortcuts = new HashMap<>();
 
     protected PropertiesModel(){
         properties = new Properties();
@@ -33,6 +34,15 @@ public class PropertiesModel implements Observable, PropertiesHandler
                 final String email = dev.split(",")[1];
                 developers.putIfAbsent(email, name);
             }
+
+            String[] sh = properties.getProperty("shortcuts").split(" - ");
+            for(String element : sh){
+                final String name = element.split(",")[0];
+                final String command = element.split(",")[1];
+                shortcuts.putIfAbsent(name, command);
+            }
+
+
             infos.add(version);
             infos.add(dateTimeBuild);
 
@@ -70,5 +80,10 @@ public class PropertiesModel implements Observable, PropertiesHandler
     @Override
     public List<Character> getSymbols() {
         return symbols;
+    }
+
+    @Override
+    public Map<String, String> loadShortcuts() {
+        return shortcuts;
     }
 }

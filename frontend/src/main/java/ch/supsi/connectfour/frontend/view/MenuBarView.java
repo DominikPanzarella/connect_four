@@ -130,4 +130,7 @@ public class MenuBarView implements ControlledViewFxml
     }
 
 
+    public <T extends MoreInfoCommand<? extends MoreInfoReceiver<MoreInfoHandler>>> void createMoreInfoBehaviour(T command){
+        helpMenuItem.setOnAction(action->command.execute());
+    }
 }

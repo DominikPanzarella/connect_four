@@ -8,5 +8,6 @@ public interface PropertiesHandler extends Handler
     List<String> loadInfos();
     Map<String,String> loadDevelopers();
     List<Character> getSymbols();
+    Map<String,String> loadShortcuts();
 
 }

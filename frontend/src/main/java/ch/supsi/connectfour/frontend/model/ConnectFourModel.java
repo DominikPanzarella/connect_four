@@ -236,7 +236,18 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
         Player toUpdate = switchTurnController.getPlayerAtIndex(position);
         String oldName = toUpdate.getName();
 
-        //TODO:update the boardview
+        //controllare che
+        if(switchTurnController.nameAlreadyUsed(oldName,newName)){
+            notifyFeedbackObservers(new NameAlreadyUsedPresentable());
+            return;
+        }
+        if(switchTurnController.symbolAlreadyUsed(oldName, newSymbol)){
+            notifyFeedbackObservers(new SymbolAlreadyUsedPresentable());
+            return;
+        }
+
+
+        //Update the board view
         List<MoveInterface> playerMoves = moves.stream()
                 .filter(move -> move.getPlayer().getName().equals(oldName))
                 .collect(Collectors.toList());
@@ -258,5 +269,6 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
         this.moves.clear();
         this.isChanged = false;
         notifyClearViewObservers();
+        notifyFeedbackObservers(new NewGamePresentable());
     }
 }

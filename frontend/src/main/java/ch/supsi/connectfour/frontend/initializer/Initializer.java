@@ -6,10 +6,7 @@ import ch.supsi.connectfour.frontend.command.*;
 import ch.supsi.connectfour.frontend.contracts.handler.*;
 import ch.supsi.connectfour.frontend.contracts.receiver.*;
 import ch.supsi.connectfour.frontend.contracts.receiver.ExitReceiver;
-import ch.supsi.connectfour.frontend.controller.AboutController;
-import ch.supsi.connectfour.frontend.controller.ColumnSelectorController;
-import ch.supsi.connectfour.frontend.controller.MenuBarController;
-import ch.supsi.connectfour.frontend.controller.PlayerInfoController;
+import ch.supsi.connectfour.frontend.controller.*;
 import ch.supsi.connectfour.frontend.mediator.*;
 import ch.supsi.connectfour.frontend.model.*;
 import ch.supsi.connectfour.frontend.view.*;
@@ -38,6 +35,7 @@ public class Initializer {
         AboutModel aboutModel = AboutModel.getInstance();
         PropertiesModel propertiesModel = PropertiesModel.getInstance();
         LanguageModel languageModel = LanguageModel.getInstance();
+        MoreInfoModel moreInfoModel = MoreInfoModel.getInstance();
 
         model.addPlayer(player1);
         model.addPlayer(player2);
@@ -86,6 +84,10 @@ public class Initializer {
         ExitView exitView = ExitView.getInstance();
         exitView.initialize();
 
+        //MOREINFOVIEW
+        MoreInfoView moreInfoView = MoreInfoView.getInstance();
+        moreInfoView.initialize();
+
         // Load main view and get controller
         FXMLLoader mainViewLoader = new FXMLLoader(Initializer.class.getResource("/view/mainview.fxml"));
         Parent mainView = mainViewLoader.load();
@@ -106,9 +108,10 @@ public class Initializer {
         AboutController aboutController = AboutController.getInstance(aboutModel,propertiesModel);
         PlayerInfoController playerInfoController1 = new PlayerInfoController(0,model,model);
         PlayerInfoController playerInfoController2 = new PlayerInfoController(1,model, model);
-
         MenuBarController menuBarController = MenuBarController.getInstance(model,model, languageModel, model);
         ColumnSelectorController columnSelectorController = ColumnSelectorController.getInstance(model);
+        MoreInfoController moreInfoController = MoreInfoController.getInstance(moreInfoModel, propertiesModel);
+
          /*
            ###################################
                    Setup Receiver
@@ -127,20 +130,18 @@ public class Initializer {
         SaveNewInfoReceiver<SaveNewInfoHandler> saveNewInfoReceiver1 = playerInfoController1;
         SaveNewInfoReceiver<SaveNewInfoHandler> saveNewInfoReceiver2 = playerInfoController2;
         NewGameReceiver<NewGameHandler> newGameReceiver = menuBarController;
-
+        MoreInfoReceiver<MoreInfoHandler> moreInfoReceiver = moreInfoController;
         /*
            ###################################
                    Setup Command
            ###################################
          */
         AboutCommand<AboutReceiver<AboutHandler>> aboutCommand = AboutCommand.create(aboutReceiver);
-
         PlayerInfoCommand<PlayerInfoReceiver<PlayerInfoHandler>> playerInfoCommand1 = PlayerInfoCommand.create(playerInfoReceiver1);
         PlayerInfoCommand<PlayerInfoReceiver<PlayerInfoHandler>> playerInfoCommand2 = PlayerInfoCommand.create(playerInfoReceiver2);
         SaveNewInfoCommand<SaveNewInfoReceiver<SaveNewInfoHandler>> saveNewInfoCommand1 = SaveNewInfoCommand.create(saveNewInfoReceiver1);
         SaveNewInfoCommand<SaveNewInfoReceiver<SaveNewInfoHandler>> saveNewInfoCommand2 = SaveNewInfoCommand.create(saveNewInfoReceiver2);
         NewGameCommand<NewGameReceiver<NewGameHandler>> newGameCommand = NewGameCommand.create(newGameReceiver);
-
         OpenFileCommand<OpenFileReceiver<OpenFileHandler>> openFileCommand = OpenFileCommand.create(openFileReceiver);
         MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn0Command = MakeMoveCommand.create(makeMoveReceiver,0);
         MakeMoveCommand<MakeMoveReceiver<MakeMoveHandler>> makeMoveColumn1Command = MakeMoveCommand.create(makeMoveReceiver,1);
@@ -157,6 +158,7 @@ public class Initializer {
         ChangeLanguageCommand<ChangeLanguageReceiver<ChangeLanguageHandler>> languageItCHCommand = ChangeLanguageCommand.create(languageReceiver, "it-CH");        //Refactored
         ChangeLanguageCommand<ChangeLanguageReceiver<ChangeLanguageHandler>> languageFrFRCommand = ChangeLanguageCommand.create(languageReceiver, "fr-FR");        //Refactored
         ChangeLanguageCommand<ChangeLanguageReceiver<ChangeLanguageHandler>> languageDeDECommand = ChangeLanguageCommand.create(languageReceiver, "de-DE");        //Refactored
+        MoreInfoCommand<MoreInfoReceiver<MoreInfoHandler>> moreInfoCommand = MoreInfoCommand.create(moreInfoReceiver);
          /*
            ###################################
                Linking Component - Command
@@ -174,6 +176,7 @@ public class Initializer {
         columnSelectorView.makeMoveColumn5(makeMoveColumn5Command);
         columnSelectorView.makeMoveColumn6(makeMoveColumn6Command);
         menuBarView.createExitBehaviour(exitCommand);
+        menuBarView.createMoreInfoBehaviour(moreInfoCommand);
         exitView.createCancelBehaviour(cancelCommand);
         exitView.createOKBehaviour(okCommand);
         menuBarView.createExportFileBehaviour(exportFileCommand);
@@ -199,12 +202,12 @@ public class Initializer {
         model.addClearViewObserver(gameBoardView);
         model.addExitObserver(exitView);
         aboutModel.addAboutObserver(aboutView);
-
         model.addPlayerInfoObserver(playerInfoView1);
         model.addPlayerInfoObserver(playerInfoView2);
         model.addSaveNewInfoObserver(playerBarView);
         model.addSaveNewInfoObserver(playerBarView);
         model.addRepaintObserver(gameBoardView);
+        moreInfoModel.addMoreInfoObserver(moreInfoView);
          /*
           ###################################
               Setup the stage
@@ -255,7 +258,12 @@ public class Initializer {
         OpenFileMediator.getInstance(stage, menuBarController, openFileKeyCombination);
         NewGameMediator.getInstance(stage,menuBarController,newGameKeyCombination);
 
+          /*
+          ###################################
+              Scene show
+           ###################################
 
+         */
         stage.show();
     }
 

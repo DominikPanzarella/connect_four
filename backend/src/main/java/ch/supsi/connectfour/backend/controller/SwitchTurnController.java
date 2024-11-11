@@ -1,6 +1,7 @@
 package ch.supsi.connectfour.backend.controller;
 
 import ch.supsi.connectfour.backend.exceptions.GameFullException;
+import ch.supsi.connectfour.backend.service.gamelogic.player.MySymbolInterface;
 import ch.supsi.connectfour.backend.service.gamelogic.player.Player;
 import ch.supsi.connectfour.backend.service.gamelogic.player.SwitchTurnService;
 
@@ -48,5 +49,13 @@ public class SwitchTurnController
     public void switchTurn()
     {
         switchTurnService.switchTurn();
+    }
+
+    public boolean nameAlreadyUsed(final String currentPlayer, final String toCheck){
+        return switchTurnService.nameAlreadyUsed(currentPlayer,toCheck);
+    }
+
+    public boolean symbolAlreadyUsed(final String currentPlayer, final MySymbolInterface toCheck){
+        return switchTurnService.symbolAlreadyUsed(currentPlayer, toCheck);
     }
 }

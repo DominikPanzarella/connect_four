@@ -16,6 +16,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
         <devs>Dominik Panzarella,dominik.panzarella@student.supsi.ch</devs>
         <symbols>XOABCDEFGHIJKLMNOPQRSTUVWXYZ123456789</symbols>
+        <shortcuts>About,Ctrl+A - Exit,Ctrl+E - Save,Ctrl+S - Open,Ctrl+O - NewGame,Ctrl+N - ColumnSelector,[0;6]</shortcuts>
     </properties>
 
     <dependencies>

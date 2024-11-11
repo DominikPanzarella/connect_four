@@ -38,6 +38,11 @@ public class MyColor implements MyColorInterface
         return String.format("#%02X%02X%02X", redInt, greenInt, blueInt);
     }
 
+    @Override
+    public boolean equals(MyColorInterface color) {
+        return (red == color.getRedChannel()) && (green == color.getGreenChannel()) && (blue == color.getBlueChannel());
+    }
+
     private double clamp(double value) {
         return Math.max(0, Math.min(1, value));
     }

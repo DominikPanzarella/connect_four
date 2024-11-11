@@ -72,7 +72,30 @@ public class SwitchTurnService implements SwitchTurnServiceInterface {
 
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
 
-
     }
+
+    @Override
+    public boolean nameAlreadyUsed(final String currentPlayer, final String toCheck){
+        for(Player player : players){
+            String currentPlayerName = player.getName();
+            if(!currentPlayerName.equalsIgnoreCase(currentPlayer)){
+                if(currentPlayerName.equalsIgnoreCase(toCheck))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean symbolAlreadyUsed(String currentPlayer, MySymbolInterface toCheck) {
+        for(Player player : players){
+            String currentPlayerName = player.getName();
+            if(!currentPlayerName.equalsIgnoreCase(currentPlayer)){
+                if( (player.getPlayerCharacter().charValue() == toCheck.getCharacter().charValue()) || (player.getPlayerColors().equals(toCheck.getColor()))) return true;
+            }
+        }
+        return false;
+    }
+
 
 }
