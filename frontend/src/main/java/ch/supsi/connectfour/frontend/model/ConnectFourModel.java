@@ -84,7 +84,7 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
     public void exportFile() {
         if(moves.isEmpty())
         {
-            //TODO: notify that the list is empty
+            notifyFeedbackObservers(new EmptyListPresentable());
             return;
         }
 
@@ -116,11 +116,16 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
             notifyClearViewObservers();
             switchTurnController.reset();
             board.resetBoard();
+
             List<MoveInterface> loadedMoves = gameController.loadGame(path);
-            for(int i=0; i<loadedMoves.size(); i++) {
-                MoveInterface move = loadedMoves.get(i);
+
+            this.movesMementoCaretaker = new MementoCaretaker<>();
+            movesMementoCaretaker.addState(new Memento<>(new ArrayList<>()));
+            for (MoveInterface move : loadedMoves) {
                 makeMove(move.getColumn());
             }
+
+            movesMementoCaretaker.addState(new Memento<>(new ArrayList<>(moves)));
 
             enableSelectorButtons();
 
@@ -128,6 +133,7 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
             throw new RuntimeException(e);
         }
     }
+
 
     public void addPlayer(Player player)
     {
@@ -305,7 +311,7 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
             this.moves = new ArrayList<>(nextState.getState());
             board.setCells(moves);
 
-
+            disableSelectorButtons();
 
             notifyClearViewObservers();
             notifyRedoObservers(moves);
@@ -320,6 +326,12 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
         for(int i=0; i<board.getWidth(); i++)
             if(!board.isColumnFull(i))
                 notifyFreeColumnObservers(i);
+    }
+
+    private void disableSelectorButtons(){
+        for(int i=0; i<board.getWidth(); i++)
+            if(board.isColumnFull(i))
+                notifyColumnFullObservers(i);
     }
 
 }

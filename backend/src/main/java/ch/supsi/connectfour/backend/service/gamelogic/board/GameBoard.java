@@ -112,18 +112,17 @@ public class GameBoard implements GameBoardInterface
 
     @Override
     public int getWidth() {
-        return NUM_ROWS;
+        return NUM_COLS;
     }
 
     @Override
     public int getHeight() {
-        return NUM_COLS;
+        return NUM_ROWS ;
     }
 
     //Helper methode
     private static void checkPosition(int row, int col)
     {
-        System.out.printf("Board::checkPosition(%d,%d)%n", row, col);
         if(row<0 || row>NUM_ROWS-1 || col<0 || col>NUM_COLS-1)
             throw new PositionNotValidException();
     }
