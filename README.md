@@ -82,7 +82,7 @@ cd frontend && mvn clean package
 ## Usage
 
 ```sh
-java -jar target/2dEditor-jar-with-dependencies.jar
+cd frontend && java -jar target/connectfour-jar-with-dependencies.jar
 ```
 
 ## Contribute
