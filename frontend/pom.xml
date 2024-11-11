@@ -53,7 +53,7 @@
 
     </dependencies>
     <build>
-        <finalName>2dEditor</finalName>
+        <finalName>connectfour</finalName>
 
         <plugins>
             <plugin>
@@ -63,7 +63,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ch.supsi.editor2d.Main</mainClass>
+                            <mainClass>ch.supsi.connectfour.frontend.Main</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
