@@ -116,6 +116,9 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
             notifyClearViewObservers();
             switchTurnController.reset();
             board.resetBoard();
+            status = GameStatusType.IN_PROGRESS;
+
+            enableSelectorButtons();
 
             List<MoveInterface> loadedMoves = gameController.loadGame(path);
 
@@ -206,10 +209,15 @@ public class ConnectFourModel implements MakeMoveHandler, OKHandler, CancelHandl
         if(isWinningMove(move)){
             status = GameStatusType.WINNER;
             notifyGameHasAWinnerObservers(new PlayerWinPresentable(currentPlayer));
+            notifyRedoButtonObservers(true);
+            notifyUndoButtonObservers(true);
+
         }
         else if(board.isFull()){
             status = GameStatusType.DRAW;
             notifyGameDrawObservers(new GameDrawPresentable());
+            notifyRedoButtonObservers(true);
+            notifyUndoButtonObservers(true);
 
         }
         else //switch turn
