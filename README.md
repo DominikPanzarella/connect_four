@@ -89,6 +89,11 @@ java -jar target/2dEditor-jar-with-dependencies.jar
 
 For contributions, bug reports, or suggestions, feel free to open an issue on GitHub.
 
+## Authors
+
+👤 **Dominik Panzarella**
+[![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://www.instagram.com/__dom_/) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dominik-panzarella-a8412817a) [![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/21978407/dominik-panzarella) [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](https://www.youtube.com/channel/UC128UoG-qfNOf6TCjarx5Mw) 
+
 ## Contact
 
 For more information, you can contact the developers via email.
