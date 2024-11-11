@@ -16,6 +16,19 @@ ConnectFour is an interactive game designed for two players who take turns to co
   - Close the current game
 - **InfoBar**: A constant information bar provides real-time feedback on actions and game events.
 
+### Feature Checklist
+
+- [x] Start a new game
+- [x] Save the current game
+- [x] Load a previously saved game
+- [x] Change player names, symbols, and colors
+- [x] Undo last move
+- [x] Redo last undone move
+- [x] Select columns using keyboard shortcuts
+- [x] Shortcuts for all actions
+- [x] Open and save games via keyboard shortcuts
+- [x] Display feedback to players through InfoBar
+
 ## Project Architecture
 
 The project follows a multilayer architecture, separating the frontend from the backend. Various design patterns were implemented to ensure modularity and flexibility:
@@ -58,4 +71,5 @@ For more information, you can contact the developers via email.
 ---
 
 > This project is intended for educational purposes only and not for commercial use.
+
 
